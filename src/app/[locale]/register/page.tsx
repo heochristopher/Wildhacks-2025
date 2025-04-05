@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation"
 
-export default async function Register() {
+export default function Register() {
   const router = useRouter()
   async function register(formData: any) {
     const body = {
