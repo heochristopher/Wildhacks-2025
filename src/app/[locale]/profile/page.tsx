@@ -106,6 +106,19 @@ export default async function ProfilePage({params}: Props) {
                         {profileMessages.profile.progress}: {course.progress}%
                       </p>
                     </div>
+                    <div className="mt-4">
+                      <h4 className="text-lg font-medium text-gray-900">
+                        {profileMessages.profile.overview[course.level].title}
+                      </h4>
+                      <p className="mt-2 text-gray-600">
+                        {profileMessages.profile.overview[course.level].description}
+                      </p>
+                      <ul className="mt-2 list-disc list-inside text-gray-600">
+                        {profileMessages.profile.overview[course.level].skills.map((skill: string, index: number) => (
+                          <li key={index}>{skill}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </article>
                 </li>
               ))}
@@ -113,7 +126,7 @@ export default async function ProfilePage({params}: Props) {
           </nav>
         </section>
 
-        <Footer />
+        
       </main>
     </NextIntlClientProvider>
   );

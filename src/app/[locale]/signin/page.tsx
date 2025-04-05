@@ -1,6 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
-import signin from "../Images/Signin.jpg";
+import signin from "@/app/Images/Signin.jpg";
 import Image from "next/image";
 
 export default function Signin() {

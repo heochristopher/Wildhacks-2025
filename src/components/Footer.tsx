@@ -1,11 +1,13 @@
 'use client';
 
-import {useTranslations} from 'next-intl';
 import {usePathname, useRouter} from 'next/navigation';
-import {routing} from '@/i18n/routing';
+
+const languages = [
+  { code: 'en', label: '🇺🇸 English' },
+  { code: 'ko', label: '🇰🇷 한국어' }
+];
 
 export default function Footer() {
-  const t = useTranslations();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -32,9 +34,9 @@ export default function Footer() {
               onChange={(e) => onSelectChange(e.target.value)}
               value={currentLocale}
             >
-              {routing.locales.map((loc) => (
-                <option key={loc} value={loc}>
-                  {t('LocaleSwitcher.locale', {locale: loc})}
+              {languages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.label}
                 </option>
               ))}
             </select>

@@ -19,7 +19,36 @@
     "title": "학습 진도",
     "subtitle": "점자 학습 여정을 추적하세요",
     "level": "레벨",
-    "progress": "진행률"
+    "progress": "진행률",
+    "overview": {
+      "beginner": {
+        "title": "초급 레벨",
+        "description": "점자 읽기와 쓰기의 기초를 마스터하세요",
+        "skills": [
+          "점자 알파벳 학습",
+          "기본 문자 인식",
+          "간단한 단어 읽기"
+        ]
+      },
+      "intermediate": {
+        "title": "중급 레벨",
+        "description": "점자 의사소통의 유창함을 키우세요",
+        "skills": [
+          "고급 문자 조합",
+          "일반적인 단어 패턴",
+          "기본 문장 구조"
+        ]
+      },
+      "advanced": {
+        "title": "고급 레벨",
+        "description": "점자에 능숙해지세요",
+        "skills": [
+          "복잡한 문장 읽기",
+          "속독 기술",
+          "전문 점자 형식"
+        ]
+      }
+    }
   },
   "levels": {
     "beginner": "초급",
