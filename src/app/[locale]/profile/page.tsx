@@ -1,53 +1,63 @@
-// app/profile/page.tsx
-import React from 'react';
+import {Locale} from 'next-intl';
+import {getTranslations, setRequestLocale} from 'next-intl/server';
+import {NextIntlClientProvider} from 'next-intl';
+import Footer from '@/components/Footer';
 
 interface Course {
   id: number;
-  title: string;
+  titleKey: string;
   progress: number;
   level: string;
 }
 
 const courses: Course[] = [
-  { id: 1, title: 'Braille Basics', progress: 33, level: 'Beginner' },
-  { id: 2, title: 'Intermediate Braille', progress: 66, level: 'Intermediate' },
-  { id: 3, title: 'Advanced Braille', progress: 100, level: 'Advanced' },
+  { id: 1, titleKey: 'brailleBasics', progress: 33, level: 'beginner' },
+  { id: 2, titleKey: 'intermediateBraille', progress: 66, level: 'intermediate' },
+  { id: 3, titleKey: 'advancedBraille', progress: 100, level: 'advanced' },
 ];
 
-const ProfilePage: React.FC = () => {
-  return (
-    <>
-      {/* Skip link for keyboard users */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-blue-500"
-      >
-        Skip to main content
-      </a>
+type Props = {
+  params: {locale: Locale};
+};
 
+export default async function ProfilePage({params}: Props) {
+  const {locale} = await params;
+  setRequestLocale(locale);
+  
+  // Get messages for client-side translations
+  const messages = await import(`../../../../messages/${locale}.json`);
+
+  // Pick only the messages we need
+  const profileMessages = {
+    LocaleSwitcher: messages.LocaleSwitcher,
+    profile: messages.profile,
+    levels: messages.levels,
+    courses: messages.courses
+  };
+
+  return (
+    <NextIntlClientProvider locale={locale} messages={profileMessages}>
       <main 
         className="min-h-screen bg-white text-gray-800 font-sans"
         id="main-content"
         role="main"
         aria-label="User profile and course progress"
       >
-        {/* Header with website branding */}
         <header 
           className="bg-blue-500 text-white py-6"
           role="banner"
         >
           <div className="container mx-auto px-4">
-            <h1 className="text-3xl font-bold">dotbydot: Braille Learning Progress</h1>
-            <p className="mt-2 text-lg">Empowering your journey to master Braille</p>
+            <h1 className="text-3xl font-bold">{profileMessages.profile.title}</h1>
+            <p className="mt-2 text-lg">{profileMessages.profile.subtitle}</p>
           </div>
         </header>
 
-        {/* Main content area */}
         <section 
           className="container mx-auto px-4 py-8"
           aria-labelledby="courses-heading"
         >
-          <h2 id="courses-heading" className="sr-only">Your Course Progress</h2>
+          <h2 id="courses-heading" className="sr-only">{profileMessages.profile.title}</h2>
           <nav 
             aria-label="Course progress"
             className="space-y-6"
@@ -68,19 +78,20 @@ const ProfilePage: React.FC = () => {
                         id={`course-${course.id}-title`}
                         className="text-2xl font-semibold"
                       >
-                        {course.title}
+                        {profileMessages.courses[course.titleKey]}
                       </h3>
-                      <p className="mt-1 text-sm text-gray-600">Level: {course.level}</p>
+                      <p className="mt-1 text-sm text-gray-600">
+                        {profileMessages.profile.level}: {profileMessages.levels[course.level]}
+                      </p>
                     </header>
                     <div className="mt-4">
-                      {/* Accessible progress bar */}
                       <div
                         className="bg-gray-300 rounded-full h-4 relative"
                         role="progressbar"
                         aria-valuenow={course.progress}
                         aria-valuemin={0}
                         aria-valuemax={100}
-                        aria-label={`${course.title} progress: ${course.progress}%`}
+                        aria-label={`${profileMessages.courses[course.titleKey]} progress: ${course.progress}%`}
                       >
                         <div
                           className="bg-green-500 h-4 rounded-full"
@@ -92,7 +103,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                       </div>
                       <p className="mt-2 text-sm text-gray-700">
-                        Progress: {course.progress}%
+                        {profileMessages.profile.progress}: {course.progress}%
                       </p>
                     </div>
                   </article>
@@ -102,18 +113,8 @@ const ProfilePage: React.FC = () => {
           </nav>
         </section>
 
-        {/* Footer with website branding */}
-        <footer 
-          className="bg-gray-100 py-4"
-          role="contentinfo"
-        >
-          <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-            © 2025 dotbydot. All rights reserved.
-          </div>
-        </footer>
+        <Footer />
       </main>
-    </>
+    </NextIntlClientProvider>
   );
-};
-
-export default ProfilePage;
+} 

@@ -1,0 +1,38 @@
+{
+  "LocaleSwitcher": {
+    "label": "언어 변경",
+    "locale": "{locale, select, en {🇺🇸 English} ko {🇰🇷 한국어} other {알 수 없음}}"
+  },
+  "Navigation": {
+    "home": "홈",
+    "profile": "프로필"
+  },
+  "NotFoundPage": {
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "URL을 확인하거나 네비게이션 메뉴를 사용해주세요."
+  },
+  "Error": {
+    "title": "오류가 발생했습니다!",
+    "description": "오류가 발생했습니다. 다시 시도해주세요."
+  },
+  "profile": {
+    "title": "학습 진도",
+    "subtitle": "점자 학습 여정을 추적하세요",
+    "level": "레벨",
+    "progress": "진행률"
+  },
+  "levels": {
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급"
+  },
+  "courses": {
+    "brailleBasics": "점자 기초",
+    "intermediateBraille": "점자 중급",
+    "advancedBraille": "점자 고급"
+  },
+  "LocaleLayout": {
+    "title": "dotbydot - 점자 학습",
+    "description": "점자 학습을 위한 접근성 플랫폼"
+  }
+} 
