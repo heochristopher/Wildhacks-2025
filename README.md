@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# dotbydot
 
-## Getting Started
+dotbydot is an accessible, educational web platform designed to help users master Braille through a series of progressive courses. Built with Next.js and React using the App Router, the website emphasizes high accessibility standards to support blind users and those relying on assistive technologies. Inspired by platforms like Duolingo and Khan Academy, dotbydot aims to offer a friendly, kind, and effective learning environment.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Accessible Design:**  
+  - Semantic HTML, ARIA attributes, and screen reader-only text ensure that all content is navigable for users with visual impairments.
+  - Keyboard navigability with focus states for interactive elements.
+  
+- **Progress Tracking:**  
+  - A clear progress display for each course with accessible progress bars.
+  - Detailed course information including title, level, and completion percentage.
+  
+- **Responsive and Educational UI:**  
+  - A responsive layout built with Tailwind CSS that adapts across devices.
+  - Warm, inviting design with high-contrast colors and clear typography.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js (App Router):** Provides a modern, file-based routing system using `page.tsx` for each route.
+- **React:** The core library for building the UI components.
+- **Tailwind CSS:** For rapid, utility-first styling that supports responsive design and accessibility.
+- **TypeScript:** Enhances code quality and maintainability with static type checking.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+The project follows the Next.js App Router structure. An example page is located at:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
