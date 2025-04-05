@@ -7,6 +7,8 @@ This document outlines the API routes for DotByDot, including endpoint definitio
 ## Setup
 pip install bcrypt boto3 "fastapi[standard]" python-dotenv pyjwt 
 
+fastapi dev main.py
+
 ## GET Endpoints
 
 ### 1. Retrieve Dashboard Progress
