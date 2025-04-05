@@ -1,6 +1,6 @@
 // /app/levels/[level]/page.tsx
 import { notFound } from "next/navigation";
-import LevelOverview from "./LevelOverview";
+import LevelOverview from "../../components/LevelOverview";
 
 const levelData = {
   1: {
