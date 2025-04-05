@@ -1,7 +1,6 @@
 import {Locale} from 'next-intl';
 import {getTranslations, setRequestLocale} from 'next-intl/server';
 import {NextIntlClientProvider} from 'next-intl';
-import Footer from '@/components/Footer';
 
 interface Course {
   id: number;
