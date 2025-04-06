@@ -91,23 +91,23 @@ export default function Level3Reading() {
   };
 
   // Use Speech Synthesis to speak the current sentence and question.
-  useEffect(() => {
-    if (!loading && currentPair) {
-      window.speechSynthesis.cancel();
-      // Speak the sentence (the answer) first.
-      const sentenceUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
-      sentenceUtterance.lang = "en-US";
-      sentenceUtterance.rate = 0.75;
-      window.speechSynthesis.speak(sentenceUtterance);
-      // Then speak the question after 2 seconds.
-      setTimeout(() => {
-        const questionUtterance = new SpeechSynthesisUtterance(currentPair.question);
-        questionUtterance.lang = "en-US";
-        questionUtterance.rate = 0.75;
-        window.speechSynthesis.speak(questionUtterance);
-      }, 2000);
-    }
-  }, [currentPair, loading]);
+  // useEffect(() => {
+  //   if (!loading && currentPair) {
+  //     window.speechSynthesis.cancel();
+  //     // Speak the sentence (the answer) first.
+  //     const sentenceUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
+  //     sentenceUtterance.lang = "en-US";
+  //     sentenceUtterance.rate = 0.75;
+  //     window.speechSynthesis.speak(sentenceUtterance);
+  //     // Then speak the question after 2 seconds.
+  //     setTimeout(() => {
+  //       const questionUtterance = new SpeechSynthesisUtterance(currentPair.question);
+  //       questionUtterance.lang = "en-US";
+  //       questionUtterance.rate = 0.75;
+  //       window.speechSynthesis.speak(questionUtterance);
+  //     }, 2000);
+  //   }
+  // }, [currentPair, loading]);
 
   const handleSubmit = async () => {
     const currentPair = sentencePairs[questionIndex];

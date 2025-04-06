@@ -3,14 +3,11 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
-export default function Level1Learning() {
-  const t = useTranslations("level1Learning");
+  export default function Level1Learning() {
+    const t = useTranslations("level1Learning");
 
   // Get the letters from translations (could be Hangul or English)
   const alphabet = t("letters").split("");
-
-
-export default function Level1Test() {
   const [questionIndex, setQuestionIndex] = useState<number | null>(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");

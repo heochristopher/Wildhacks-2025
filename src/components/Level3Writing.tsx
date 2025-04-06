@@ -198,6 +198,6 @@ export default function Level3Writing() {
       >
         {t("submit")}
       </button>
-    </main>
+    </div>
   );
 }

@@ -5,8 +5,6 @@ import EndOfLevel from "./EndOfLevel";
 
 export default function Level2Learning() {
   const t = useTranslations("level2Learning");
-  const [questionNumber, setQuestionNumber] = useState(1);
-  const [isFinished, setIsFinished] = useState(false);
   const [currentDifficulty, setCurrentDifficulty] = useState("easy");
   const [questions, setQuestions] = useState<string[]>([]);
   const [questionNumber, setQuestionNumber] = useState<number | null>(null); // index-based
@@ -44,7 +42,7 @@ export default function Level2Learning() {
       }
       // Once questions are loaded, speak the current word.
       if (!isLoading && questions.length > 0) {
-        const currentWord = questions[questionNumber - 1];
+        const currentWord = questions[questionNumber];
         if (currentWord) {
           // Cancel any ongoing speech before starting a new utterance.
           window.speechSynthesis.cancel();
@@ -128,7 +126,9 @@ export default function Level2Learning() {
 
   if (isFinished) return <EndOfLevel />;
 
-  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
+  const currentWord = questions[questionNumber] || t("loadingFallback");
+  console.log(questionNumber);
+  console.log(currentWord);
 
   return (
     <main
@@ -137,7 +137,7 @@ export default function Level2Learning() {
     >
       {/* Question count */}
       <h2 id="questionCount" className="text-xl mb-4">
-        {t("questionCount", { current: questionNumber, total: 10 })}
+        {t("questionCount", { current: questionNumber + 1, total: 10 })}
       </h2>
       
       {/* Instructions */}

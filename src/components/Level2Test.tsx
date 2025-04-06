@@ -17,6 +17,7 @@ export default function Level2Test() {
 
   // Fetch questions on mount
   // Fetch progress and content
+  
   useEffect(() => {
     const fetchProgressAndContent = async () => {
       try {
@@ -47,7 +48,7 @@ export default function Level2Test() {
   // Compute current word
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score+1) / 10;
+      const percent = (score + 1) / 10;
       let newDifficulty = currentDifficulty;
 
       if (percent < 0.5) {
@@ -86,118 +87,117 @@ export default function Level2Test() {
       console.error("Error submitting progress:", err);
     }
   };
-
-  const handleAnswer = () => {
-      const currentWord = questions[questionNumber - 1] || t("loadingFallback");
-    const answer = userAnswer.trim().toLowerCase();
-
-  // When currentWord changes, speak it using the Speech Synthesis API
-  useEffect(() => {
-    if (!isLoading && questions.length > 0) {
-      window.speechSynthesis.cancel(); // Cancel any ongoing speech
-      const utterance = new SpeechSynthesisUtterance(currentWord);
-      utterance.lang = "en-US"; // Adjust the language if needed
-      window.speechSynthesis.speak(utterance);
-    }
-  }, [currentWord, isLoading, questions]);
-
-  const handleAnswer = () => {
-    const trimmedAnswer = userAnswer.trim().toLowerCase();
-    const expectedAnswer = currentWord.trim().toLowerCase();
-
-    if (trimmedAnswer === expectedAnswer) {
-      setCorrectCount((prev) => prev + 1);
-      setFeedback(t("feedbackCorrect"));
-      nextQuestion();
-    } else if (attempts === 0) {
-      setFeedback(t("feedbackIncorrectOne"));
-      setAttempts(1);
-      setUserAnswer("");
-    } else {
-      setFeedback(t("feedbackIncorrectTwo"));
-      nextQuestion();
-    }
-  };
-
-  const nextQuestion = () => {
-    setUserAnswer("");
-    setAttempts(0);
-    if (questionNumber >= 10) {
-      setIsFinished(true);
-      submitProgress(correctCount);
-    } else {
-      setQuestionNumber((prev) => prev + 1);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="p-10 font-mono">
-        {t("loading")}
-      </div>
-    );
-  }
-
-  if (isFinished) {
-    return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
-  }
-
   
-  return (
-    <main
-      role="main"
-      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
-    >
-      {/* Question Count */}
-      <h2 id="questionCount" className="text-xl mb-4">
-        {t("questionCount", { current: questionNumber, total: 10 })}
-      </h2>
 
-      {/* Instructions */}
-      <h3 id="instruction" className="mb-2">
-        {t("instruction")}
-      </h3>
 
-      {/* Display current word with live region */}
-      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
-        {currentWord}
-      </div>
+    // When currentWord changes, speak it using the Speech Synthesis API
+    // useEffect(() => {
+    //   if (!isLoading && questions.length > 0) {
+    //     window.speechSynthesis.cancel(); // Cancel any ongoing speech
+    //     const utterance = new SpeechSynthesisUtterance(currentWord);
+    //     utterance.lang = "en-US"; // Adjust the language if needed
+    //     window.speechSynthesis.speak(utterance);
+    //   }
+    // }, [currentWord, isLoading, questions]);
 
-      {/* Hidden label for screen readers */}
-      <label htmlFor="userAnswer" className="sr-only">
-        {t("inputLabel")}
-      </label>
-      <input
-        id="userAnswer"
-        type="text"
-        value={userAnswer}
-        onChange={(e) => setUserAnswer(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleAnswer();
-          }
-        }}
-        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
-        placeholder={t("inputPlaceholder")}
-        maxLength={50}
-        aria-labelledby="instruction questionCount"
-      />
+    const handleAnswer = () => {
+      const currentWord = questions[questionNumber - 1] || t("loadingFallback");
+      const trimmedAnswer = userAnswer.trim().toLowerCase();
+      const expectedAnswer = currentWord.trim().toLowerCase();
 
-      {/* Feedback message announced via role="alert" */}
-      {feedback && (
-        <p role="alert" className="text-red-600 mb-2">
-          {feedback}
-        </p>
-      )}
+      if (trimmedAnswer === expectedAnswer) {
+        setCorrectCount((prev) => prev + 1);
+        setFeedback(t("feedbackCorrect"));
+        nextQuestion();
+      } else if (attempts === 0) {
+        setFeedback(t("feedbackIncorrectOne"));
+        setAttempts(1);
+        setUserAnswer("");
+      } else {
+        setFeedback(t("feedbackIncorrectTwo"));
+        nextQuestion();
+      }
+    };
 
-      {/* Submit Button */}
-      <button
-        onClick={handleAnswer}
-        className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
-        aria-label={t("submitAriaLabel")}
+    const nextQuestion = () => {
+      setUserAnswer("");
+      setAttempts(0);
+      if (questionNumber >= 10) {
+        setIsFinished(true);
+        submitProgress(correctCount);
+      } else {
+        setQuestionNumber((prev) => prev + 1);
+      }
+    };
+
+    if (isLoading) {
+      return (
+        <div className="p-10 font-mono">
+          {t("loading")}
+        </div>
+      );
+    }
+
+    if (isFinished) {
+      return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
+    }
+    const currentWord = questions[questionNumber - 1] || t("loadingFallback");
+  
+    return (
+      <main
+        role="main"
+        className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
       >
-        {t("submit")}
-      </button>
-    </main>
-  );
+        {/* Question Count */}
+        <h2 id="questionCount" className="text-xl mb-4">
+          {t("questionCount", { current: questionNumber, total: 10 })}
+        </h2>
+
+        {/* Instructions */}
+        <h3 id="instruction" className="mb-2">
+          {t("instruction")}
+        </h3>
+
+        {/* Display current word with live region */}
+        <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+          {currentWord}
+        </div>
+
+        {/* Hidden label for screen readers */}
+        <label htmlFor="userAnswer" className="sr-only">
+          {t("inputLabel")}
+        </label>
+        <input
+          id="userAnswer"
+          type="text"
+          value={userAnswer}
+          onChange={(e) => setUserAnswer(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleAnswer();
+            }
+          }}
+          className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
+          placeholder={t("inputPlaceholder")}
+          maxLength={50}
+          aria-labelledby="instruction questionCount"
+        />
+
+        {/* Feedback message announced via role="alert" */}
+        {feedback && (
+          <p role="alert" className="text-red-600 mb-2">
+            {feedback}
+          </p>
+        )}
+
+        {/* Submit Button */}
+        <button
+          onClick={handleAnswer}
+          className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
+          aria-label={t("submitAriaLabel")}
+        >
+          {t("submit")}
+        </button>
+      </main>
+    );
 }
