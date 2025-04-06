@@ -90,7 +90,8 @@ declare const messages: {
     "inputPlaceholder": "Type the letter",
     "feedbackIncorrect": "Incorrect. Try again!",
     "submit": "Submit",
-    "submitAriaLabel": "Submit your answer"
+    "submitAriaLabel": "Submit your answer",
+    "language": "English"
   },
   "level1Test": {
     "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -103,7 +104,8 @@ declare const messages: {
     "feedbackIncorrectOne": "Incorrect. One more try!",
     "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit",
-    "submitAriaLabel": "Submit your answer"
+    "submitAriaLabel": "Submit your answer",
+    "language": "English"
   },
   "level2Learning": {
     "loading": "Loading questions...",
@@ -114,7 +116,8 @@ declare const messages: {
     "inputPlaceholder": "Type your answer here",
     "feedbackIncorrect": "Incorrect. Try again!",
     "submit": "Submit Answer",
-    "submitAriaLabel": "Submit your answer"
+    "submitAriaLabel": "Submit your answer",
+    "language": "English"
   },
   "level2Test": {
     "loading": "Loading questions...",
@@ -127,7 +130,8 @@ declare const messages: {
     "feedbackIncorrectOne": "Incorrect. One more try!",
     "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit Answer",
-    "submitAriaLabel": "Submit your answer"
+    "submitAriaLabel": "Submit your answer",
+    "language": "English"
   },
   "level3Reading": {
     "errorFetch": "Error fetching reading activity",
@@ -142,7 +146,8 @@ declare const messages: {
     "feedbackIncorrectOne": "Incorrect. One more try!",
     "feedbackIncorrectTwo": "Incorrect again.",
     "lang": "en-US",
-    "rate": "0.75"
+    "rate": "0.75",
+    "language": "English"
   },
   "level3Writing": {
     "loading": "Loading sentences...",
@@ -157,7 +162,8 @@ declare const messages: {
     "submitAriaLabel": "Submit your answer",
     "errorFetch": "Failed to fetch sentences",
     "lang": "en-US",
-    "rate": "0.75"
+    "rate": "0.75",
+    "language": "English"
   },
   "endOfTest": {
     "congrats": "Great job!",

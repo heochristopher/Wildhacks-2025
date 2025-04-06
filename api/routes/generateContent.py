@@ -33,8 +33,10 @@ async def generate_new_content(
     return {"content": content}
 
 @router.post("/generateQuestion", summary="Generate a question from a sentence")
-async def generate_question(data: SentenceRequest):
-    question = content_generator.generate_question_from_sentence(data.sentence)
+async def generate_question(data: SentenceRequest,
+                            language: str = Query("English", description="Language to use")
+                            ):
+    question = content_generator.generate_question_from_sentence(data.sentence, language)
     return {"question": question}
 
 @router.post("/checkAnswer", summary="Check if answer is correct")

@@ -39,7 +39,7 @@ export default function Level2Learning() {
         }
 
         const contentRes = await fetch(
-          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
+          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=${t("language")}`
         );
         const contentData = await contentRes.json();
         setQuestions(contentData.content.slice(0, 10)); // limit to 10 words

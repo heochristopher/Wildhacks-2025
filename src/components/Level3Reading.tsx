@@ -36,7 +36,7 @@ export default function Level3Reading() {
         setCurrentDifficulty(difficulty);
 
         const contentRes = await fetch(
-          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=English`
+          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=${t("language")}`
         );
         const contentData = await contentRes.json();
 
@@ -46,7 +46,7 @@ export default function Level3Reading() {
         // Fetch questions concurrently for each sentence.
         await Promise.all(
           sentenceArray.map(async (sentence) => {
-            const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
+            const res = await fetch(`http://localhost:8000/generateContent/generateQuestion?language=${t("language")}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ sentence }),

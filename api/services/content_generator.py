@@ -60,9 +60,9 @@ def generate_sentences(n: int = 3, difficulty: str = "easy", language: str = "En
     
     
 
-def generate_question_from_sentence(sentence: str) -> str:
+def generate_question_from_sentence(sentence: str, language: str = "English") -> str:
     prompt = f"""
-    Take the following sentence and generate a very simple reading comprehension question suitable for an early braille learner.
+    Take the following sentence and generate a very simple reading comprehension question in **{language}** suitable for an early braille learner.
 
     Sentence: "{sentence}"
 

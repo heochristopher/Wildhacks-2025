@@ -86,7 +86,8 @@
     "inputPlaceholder": "글자를 입력하세요",
     "feedbackIncorrect": "틀렸습니다. 다시 시도하세요!",
     "submit": "제출",
-    "submitAriaLabel": "답변 제출"
+    "submitAriaLabel": "답변 제출",
+    "language": "Korean"
   },
   "level1Test": {
     "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
@@ -99,7 +100,8 @@
     "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
     "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "submit": "제출",
-    "submitAriaLabel": "답변 제출"
+    "submitAriaLabel": "답변 제출",
+    "language": "Korean"
   },
   "level2Learning": {
     "loading": "문제를 불러오는 중...",
@@ -110,7 +112,8 @@
     "inputPlaceholder": "답을 입력하세요",
     "feedbackIncorrect": "틀렸습니다. 다시 시도하세요!",
     "submit": "답 제출",
-    "submitAriaLabel": "답변 제출"
+    "submitAriaLabel": "답변 제출",
+    "language": "Korean"
   },
   "level2Test": {
     "loading": "문제를 불러오는 중...",
@@ -123,7 +126,8 @@
     "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
     "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "submit": "답 제출",
-    "submitAriaLabel": "답변 제출"
+    "submitAriaLabel": "답변 제출",
+    "language": "Korean"
   },
   "level3Reading": {
     "errorFetch": "읽기 활동을 불러오는 중 오류가 발생했습니다",
@@ -138,7 +142,8 @@
     "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
     "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "lang": "ko-KR",
-    "rate": "1.25"
+    "rate": "1.25",
+    "language": "Korean"
   },
   "level3Writing": {
     "loading": "문장을 불러오는 중...",
@@ -153,6 +158,7 @@
     "submitAriaLabel": "답변 제출",
     "errorFetch": "문장을 불러오는데 실패했습니다",
     "lang": "ko-KR",
-    "rate": "1.25"
+    "rate": "1.25",
+    "language": "Korean"
   }
 }

@@ -31,7 +31,7 @@ export default function Level2Test() {
         setCurrentDifficulty(difficulty);
 
         const contentRes = await fetch(
-          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
+          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=${t("language")}`
         );
         const contentData = await contentRes.json();
         setQuestions(contentData.content.slice(0, 10));
@@ -141,7 +141,7 @@ export default function Level2Test() {
       </h3>
 
       {/* Display current word with live region */}
-      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+      <div tabIndex={0} className="text-2xl mb-6 font-semibold" aria-live="polite">
         {currentWord}
       </div>
 

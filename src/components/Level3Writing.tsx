@@ -33,7 +33,7 @@ export default function Level3Writing() {
 
         // Get content using difficulty.
         const contentRes = await fetch(
-          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=English`
+          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=${t("language")}`
         );
         const contentData = await contentRes.json();
         setSentences(contentData.content.slice(0, 3)); // Limit to 3 sentences.
