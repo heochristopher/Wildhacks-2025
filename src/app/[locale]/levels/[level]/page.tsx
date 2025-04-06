@@ -1,11 +1,17 @@
-// /app/levels/[level]/page.tsx
 import { notFound } from "next/navigation";
 import LevelOverview from "@/components/LevelOverview";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
+export interface PageProps {
+  params: {
+    locale: string;
+    level: string;
+  };
+}
 
-export default function LevelPage({ params }: { params: { level: string } }) {
-  const t = useTranslations("levelPage");
+export default async function LevelPage({ params }: PageProps) {
+  const t = await getTranslations({ locale: params.locale, namespace: "levelPage" });
+
   const routes = {
     1: "/play/1learning",
     2: "/play/1test",
@@ -14,8 +20,7 @@ export default function LevelPage({ params }: { params: { level: string } }) {
     5: "/play/3reading",
     6: "/play/3writing"
   };
-  
-  // Level data with translatable text coming from JSON files.
+
   const levelData = {
     1: {
       title: t("level1LearningTitle"),
@@ -49,11 +54,10 @@ export default function LevelPage({ params }: { params: { level: string } }) {
     },
   };
 
-  const levelInfo = levelData[params.level as unknown as keyof typeof levelData];
+  const levelNumber = Number(params.level);
+  const levelInfo = levelData[levelNumber as keyof typeof levelData];
 
-  if (!levelInfo) {
-    return notFound(); // 404 if invalid level
-  }
+  if (!levelInfo) return notFound();
 
   return (
     <LevelOverview
