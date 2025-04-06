@@ -69,54 +69,8 @@
     "level3WritingDescription": "Learn how to write sentences with braille."
   },
   "levelOverview": {
-    "start": "Pizza",
-    "buttonText": "Pizza",
+    "start": "Start",
     "startAriaLabel": "Start level"
-  },
-  "profile": {
-    "title": "Your Learning Progress",
-    "subtitle": "Track your journey in learning Braille",
-    "level": "Level",
-    "progress": "Progress",
-    "overview": {
-      "beginner": {
-        "title": "Beginner Level",
-        "description": "Master the basics of Braille reading and writing",
-        "skills": [
-          "Learn Braille alphabet",
-          "Basic character recognition",
-          "Simple word reading"
-        ]
-      },
-      "intermediate": {
-        "title": "Intermediate Level",
-        "description": "Build fluency in Braille communication",
-        "skills": [
-          "Advanced character combinations",
-          "Common word patterns",
-          "Basic sentence structure"
-        ]
-      },
-      "advanced": {
-        "title": "Advanced Level",
-        "description": "Achieve proficiency in Braille",
-        "skills": [
-          "Complex sentence reading",
-          "Speed reading techniques",
-          "Specialized Braille formats"
-        ]
-      }
-    }
-  },
-  "levels": {
-    "beginner": "Beginner",
-    "intermediate": "Intermediate",
-    "advanced": "Advanced"
-  },
-  "courses": {
-    "brailleBasics": "Braille Basics",
-    "intermediateBraille": "Intermediate Braille",
-    "advancedBraille": "Advanced Braille"
   },
   "LocaleLayout": {
     "title": "dotbydot - Learn Braille",

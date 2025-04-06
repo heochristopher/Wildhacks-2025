@@ -40,8 +40,8 @@ export default function LevelsDashboard() {
   ];
 
   return (
-    <div className="min-h-screen p-10 bg-gray-100 font-mono">
-      <h1 className="text-4xl font-bold text-center mb-10">
+    <div className="min-h-screen p-10 bg-gray-100 font-mono text-black">
+      <h1 tabIndex={0} className="text-4xl font-bold text-center mb-10">
         {t("pageTitle")}
       </h1>
       <div className="grid gap-6 md:grid-cols-3">
