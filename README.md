@@ -153,21 +153,16 @@ POST /updateScore/
                 difficulty: string
             },
             test: {
-                questions: []string,
                 score: number,
                 difficulty: string
             }
         },
         level3: {
             reading: {
-                questions: []string,
-                lastCompleted: number,
                 score: number,
                 difficulty: string
             },
             test: {
-                questions: []string,
-                lastCompleted: number,
                 score: number,
                 difficulty: string
             }
