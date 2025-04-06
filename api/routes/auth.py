@@ -49,7 +49,7 @@ async def register(request: RegisterRequest, response: Response):
         "progress": {
             "level1": {"learning": {"lastCompleted": 0, "score": -1}, "test": {"score": -1}},
             "level2": {"learning": {"questions": [], "lastCompleted": 0, "score": -1, "difficulty": "medium"}, "test": {"questions": [], "score": -1, "difficulty": "medium"}},
-            "level3": {"reading": {"questions": [], "lastCompleted": 0, "score": -1, "difficulty": "medium"}, "test": {"questions": [], "lastCompleted": 0, "score": -1, "difficulty": "medium"}}
+            "level3": {"reading": {"questions": [], "lastCompleted": 0, "score": -1, "difficulty": "medium"}, "writing": {"questions": [], "lastCompleted": 0, "score": -1, "difficulty": "medium"}}
         }
     }
     try:
