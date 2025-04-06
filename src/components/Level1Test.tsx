@@ -26,6 +26,8 @@ export default function Level1Test() {
   const [isFinished, setIsFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // track up to 2 tries
+  const [isComposing, setIsComposing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setShuffledAlphabet(shuffle(alphabet));
@@ -34,32 +36,53 @@ export default function Level1Test() {
   const currentLetter = shuffledAlphabet[questionIndex];
 
   const handleAnswer = () => {
-    const trimmed = userAnswer.trim().toUpperCase();
+    if (isSubmitting || isComposing) return;
+    setIsSubmitting(true);
 
-    if (trimmed === currentLetter) {
+    const trimmedInput = userAnswer.trim();
+    const isLatin = /^[A-Za-z]$/.test(currentLetter);
+    const expectedLetter = isLatin
+      ? currentLetter.toUpperCase().normalize("NFC")
+      : currentLetter.normalize("NFD");
+    const actualInput = isLatin
+      ? trimmedInput.toUpperCase().normalize("NFC")
+      : trimmedInput.normalize("NFD");
+
+    console.log(actualInput, expectedLetter);
+
+    if (actualInput === expectedLetter) {
       setCorrectCount((prev) => prev + 1);
       setFeedback(t("feedbackCorrect"));
-      nextQuestion();
+      setTimeout(() => {
+        nextQuestion();
+      }, 1000);
     } else if (attempts === 0) {
       setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
       setUserAnswer("");
+      setIsSubmitting(false);
     } else {
       setFeedback(t("feedbackIncorrectTwo"));
-      nextQuestion();
+      setTimeout(() => {
+        nextQuestion();
+      }, 1000);
       setUserAnswer("");
     }
   };
 
+
   const nextQuestion = () => {
+
     setUserAnswer("");
     setAttempts(0);
+    setFeedback("");
 
     if (questionIndex === shuffledAlphabet.length - 1) {
       setIsFinished(true);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
+    setIsSubmitting(false);
   };
 
   if (shuffledAlphabet.length === 0) {
@@ -106,8 +129,13 @@ export default function Level1Test() {
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={(e) => {
+          setIsComposing(false);
+          setUserAnswer(e.target.value);
+        }}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !isComposing) {
             handleAnswer();
           }
         }}

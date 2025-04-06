@@ -3,11 +3,10 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
-
-
 export default function Level1Learning() {
   const t = useTranslations("level1Learning");
 
+  // Get the letters from translations (could be Hangul or English)
   const alphabet = t("letters").split("");
 
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -18,7 +17,13 @@ export default function Level1Learning() {
   const currentLetter = alphabet[questionIndex];
 
   const handleAnswer = () => {
-    if (userAnswer.trim().toUpperCase() === currentLetter) {
+    const trimmedInput = userAnswer.trim();
+    // Check if currentLetter is a Latin character using a regex
+    const isLatin = /^[A-Za-z]$/.test(currentLetter);
+    const expectedLetter = isLatin ? currentLetter.toUpperCase() : currentLetter;
+    const actualInput = isLatin ? trimmedInput.toUpperCase() : trimmedInput;
+
+    if (actualInput === expectedLetter) {
       setFeedback("");
       setUserAnswer("");
 
@@ -36,15 +41,18 @@ export default function Level1Learning() {
   if (isFinished) return <EndOfLevel />;
 
   return (
-    <main role="main" className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
       {/* Letter count and instructions */}
       <h2 id="letterCount" className="text-xl mb-4">
-        {t("letterCount", { current: questionIndex + 1, total: 26 })}
+        {t("letterCount", { current: questionIndex + 1, total: alphabet.length })}
       </h2>
       <h3 id="instruction" className="mb-2">
         {t("instruction")}
       </h3>
-      
+
       {/* Current letter displayed with polite live region */}
       <div className="text-4xl font-bold mb-6" aria-live="polite">
         {currentLetter}

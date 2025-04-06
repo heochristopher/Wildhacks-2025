@@ -73,7 +73,7 @@
     "startAriaLabel": "레벨 시작"
   },
   "level1Learning": {
-    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ",
     "letterCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
     "inputLabel": "위에 표시된 글자를 입력하세요",
@@ -83,7 +83,7 @@
     "submitAriaLabel": "답변 제출"
   },
   "level1Test": {
-    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ",
     "loadingTest": "테스트 준비 중...",
     "questionCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
