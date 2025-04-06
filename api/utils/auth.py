@@ -10,7 +10,7 @@ def get_current_user(request: Request):
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
     try:
-        payload = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=[os.getenv('ALGORITHM')])
+        payload = jwt.decode(token, os.getenv('HASH_SECRET_KEY'), algorithms=[os.getenv('ALGORITHM')])
         email = payload.get("email")
         if email is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
