@@ -98,6 +98,7 @@ POST /submitTest
 ```javascript
 {
     level: number,
+    isReading: boolean,
     score: number,
     difficulty: string
 }
@@ -162,7 +163,7 @@ POST /updateScore/
                 score: number,
                 difficulty: string
             },
-            test: {
+            writing: {
                 score: number,
                 difficulty: string
             }

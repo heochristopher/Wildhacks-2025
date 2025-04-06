@@ -68,9 +68,11 @@ if ser is not None:
 
                     if message_type == "lcd":
                         try:
+                            text_to_send = data["payload"]  # "hi"
+                            ser.write(text_to_send.encode('utf-8') + b'\n')
                             # Convert the binary string to bytes and send to Arduino
-                            binary_bytes = binary_string_to_bytes(payload)
-                            ser.write(binary_bytes)
+                            # payload = payload.encode('utf-8')
+                            # ser.write(payload)
                             # Optionally, acknowledge receipt
                             await websocket.send_json({"type": "ack", "payload": "LCD command sent"})
                         except Exception as e:

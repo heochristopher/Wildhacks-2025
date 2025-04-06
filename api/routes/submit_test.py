@@ -11,6 +11,7 @@ router = APIRouter(
 
 class SubmitTestRequest(BaseModel):
     level: int
+    isReading: bool
     score: str   # Test score as a percentage (e.g., 0.8) — convert to float for db
     difficulty: str
 
@@ -19,12 +20,26 @@ async def submit_test(request: SubmitTestRequest, current_user: dict = Depends(g
     level_key = f"level{request.level}"
     progress = current_user.setdefault("progress", {})
     level_progress = progress.setdefault(level_key, {})
-    
-    level_progress["test"] = {
-        "score": request.score,
-        "difficulty": request.difficulty,
-        "questions": []  # Update as needed
-    }
+
+    if request.level == 3:
+        if request.isReading:
+            level_progress["reading"] = {
+                "score": request.score,
+                "difficulty": request.difficulty,
+                "questions": []
+            }
+        else:
+            level_progress["writing"] = {
+                "score": request.score,
+                "difficulty": request.difficulty,
+                "questions": []
+            }
+    else:
+        level_progress["test"] = {
+            "score": request.score,
+            "difficulty": request.difficulty,
+            "questions": []  # Update as needed
+        }
     
     try:
         table.put_item(Item=current_user)
