@@ -77,15 +77,15 @@ export default function Level3Reading() {
   }, [questionIndex]);
 
   // Optionally, you could also speak the current sentence whenever it changes.
-  useEffect(() => {
-    if (!loading && currentPair) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentPair.sentence);
-      utterance.lang = t("lang");
-      utterance.rate = Number(t("rate"));
-      window.speechSynthesis.speak(utterance);
-    }
-  }, [currentPair, loading, t]);
+  // useEffect(() => {
+  //   if (!loading && currentPair) {
+  //     window.speechSynthesis.cancel();
+  //     const utterance = new SpeechSynthesisUtterance(currentPair.question);
+  //     utterance.lang = t("lang");
+  //     utterance.rate = Number(t("rate"));
+  //     window.speechSynthesis.speak(utterance);
+  //   }
+  // }, [currentPair, loading, t]);
 
   const handleSubmit = async () => {
     if (!currentPair) return;
@@ -103,14 +103,14 @@ export default function Level3Reading() {
 
     if (verdict === "Correct") {
       setCorrectCount((prev) => prev + 1);
-      setFeedback(t("feedbackCorrect", "✅ Correct!"));
+      setFeedback(t("feedbackCorrect"));
       nextQuestion();
     } else if (attempts === 0) {
-      setFeedback(t("feedbackIncorrectOne", "❌ Incorrect. One more try!"));
+      setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
       setUserAnswer("");
     } else {
-      setFeedback(t("feedbackIncorrectTwo", "❌ Incorrect again."));
+      setFeedback(t("feedbackIncorrectTwo"));
       nextQuestion();
     }
   };
@@ -158,7 +158,7 @@ export default function Level3Reading() {
   if (loading)
     return (
       <div className="p-10 font-mono">
-        {t("loading", "Loading reading activity...")}
+        {t("loading")}
       </div>
     );
 
@@ -179,7 +179,7 @@ export default function Level3Reading() {
 
       {/* Instructions */}
       <h3 id="instruction" className="mb-2">
-        {t("instruction", "Please read the sentence and answer the question:")}
+        {t("instruction")}
       </h3>
 
       {/* Display current sentence and question */}
@@ -188,7 +188,7 @@ export default function Level3Reading() {
 
       {/* Hidden label for input */}
       <label htmlFor="userAnswer" className="sr-only">
-        {t("inputLabel", "Type your answer here")}
+        {t("inputLabel")}
       </label>
       <input
         id="userAnswer"
@@ -203,16 +203,16 @@ export default function Level3Reading() {
         }}
         onFocus={() => {
           // When input is focused, speak the current sentence aloud.
-          if (currentPair && currentPair.sentence) {
+          if (currentPair && currentPair.question) {
             window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(currentPair.sentence);
+            const utterance = new SpeechSynthesisUtterance(currentPair.question);
             utterance.lang = t("lang");
             utterance.rate = Number(t("rate"));
             window.speechSynthesis.speak(utterance);
           }
         }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-96 text-black"
-        placeholder={t("inputPlaceholder", "Type your answer here")}
+        placeholder={t("inputPlaceholder")}
         maxLength={300}
         aria-labelledby="instruction questionCount"
       />
@@ -228,9 +228,9 @@ export default function Level3Reading() {
       <button
         onClick={handleSubmit}
         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
-        aria-label={t("submitAriaLabel", "Submit your answer")}
+        aria-label={t("submitAriaLabel")}
       >
-        {t("submit", "Submit Answer")}
+        {t("submit")}
       </button>
     </main>
   );
