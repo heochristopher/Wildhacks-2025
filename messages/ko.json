@@ -25,7 +25,7 @@
   },
   "footer": {
     "footerHeading": "푸터",
-    "createdBy": "제작: Chris Heo, Hajo Wolfram, Anthony Chung, Elaine Cui",
+    "createdBy": "제작: 허남윤, 김하요, 정태인, 수이린",
     "gitHub": "GitHub",
     "languageSelectAriaLabel": "언어 선택"
   },
@@ -79,7 +79,7 @@
     "startAriaLabel": "레벨 시작"
   },
   "level1Learning": {
-    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅔㅖㅘㅝㅢㅢㅣ",
     "letterCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
     "inputLabel": "위에 표시된 글자를 입력하세요",
@@ -90,7 +90,7 @@
     "language": "Korean"
   },
   "level1Test": {
-    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅔㅖㅘㅝㅢㅢㅣ",
     "loadingTest": "테스트 준비 중...",
     "questionCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
@@ -117,6 +117,7 @@
   },
   "level2Test": {
     "loading": "문제를 불러오는 중...",
+    "loadingTest": "문제를 불러오는 중...",
     "loadingFallback": "불러오는 중...",
     "questionCount": "전체 {total}문제 중 {current}번째 문제",
     "instruction": "단어를 읽고 철자를 입력하세요:",
@@ -127,7 +128,9 @@
     "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "submit": "답 제출",
     "submitAriaLabel": "답변 제출",
-    "language": "Korean"
+    "language": "Korean",
+    "lang": "ko-KR",
+    "rate": "1.25"
   },
   "level3Reading": {
     "errorFetch": "읽기 활동을 불러오는 중 오류가 발생했습니다",

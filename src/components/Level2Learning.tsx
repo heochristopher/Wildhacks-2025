@@ -12,6 +12,8 @@ export default function Level2Learning() {
   const [isLoading, setIsLoading] = useState(true);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Create a ref for the input to auto-focus it.
   const inputRef = useRef<HTMLInputElement>(null);
@@ -161,7 +163,7 @@ export default function Level2Learning() {
       </h3>
 
       {/* Display current word */}
-      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+      <div tabIndex={0} className="text-2xl mb-6 font-semibold" aria-live="polite">
         {currentWord}
       </div>
 
@@ -175,11 +177,16 @@ export default function Level2Learning() {
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleAnswer();
-          }
-        }}
+        onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={(e) => {
+            setIsComposing(false);
+            setUserAnswer(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !isComposing) {
+              handleAnswer();
+            }
+          }}
         onFocus={() => {
           // When input is focused, speak the current word aloud.
           if (currentWord) {
