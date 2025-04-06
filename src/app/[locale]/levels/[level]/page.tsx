@@ -1,6 +1,7 @@
 // /app/levels/[level]/page.tsx
 import { notFound } from "next/navigation";
 import LevelOverview from "@/components/LevelOverview";
+import Footer from "@/components/Footer"
 
 const levelData = {
   1: {
@@ -43,10 +44,13 @@ export default function LevelPage({ params }: { params: { level: string } }) {
   }
 
   return (
+    <div>
     <LevelOverview
       title={levelInfo.title}
       description={levelInfo.description}
       startRoute={levelInfo.startRoute}
     />
+    </div>
+    
   );
 }

@@ -19,8 +19,8 @@ export default function AlphabetLearning() {
   }
 
   return (
-    <div className="p-10 font-mono">
-      <h2 className="text-xl mb-4">Question {questionNumber} of 10</h2>
+    <div className="flex flex-col p-10 items-center justify-center font-mono min-h-screen">
+      <h2 className="text-xl mb-4 ">Question {questionNumber} of 10</h2>
       {/* your question logic goes here */}
       <button
         onClick={handleAnswer}

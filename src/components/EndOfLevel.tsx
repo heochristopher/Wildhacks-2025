@@ -11,13 +11,13 @@ export default function EndOfLevel() {
       <div className="space-x-4">
         <button
           onClick={() => router.push("/levels")}
-          className="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-600"
+          className="px-6 py-3 bg-gray-700 text-white cursor-pointer rounded hover:bg-gray-600"
         >
           Back to Levels
         </button>
         <button
           onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-green-800 text-white rounded hover:bg-green-700"
+          className="px-6 py-3 cursor-pointer bg-green-800 text-white rounded hover:bg-green-700"
         >
           Replay Level
         </button>
