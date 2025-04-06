@@ -39,6 +39,40 @@
     "signInButtonAria": "로그인 폼 제출",
     "signinImageAlt": "로그인 페이지를 설명하는 이미지"
   },
+  "levelsDashboard": {
+    "pageTitle": "점자 레벨 선택",
+    "level1LearningTitle": "레벨 1: 학습",
+    "level1LearningDescription": "각 글자의 점자 표현을 배우세요.",
+    "level1TestTitle": "레벨 1: 테스트",
+    "level1TestDescription": "점자 알파벳에 대한 지식을 테스트하세요.",
+    "level2LearningTitle": "레벨 2: 학습",
+    "level2LearningDescription": "단어 읽기 및 쓰기 연습을 하세요.",
+    "level2TestTitle": "레벨 2: 테스트",
+    "level2TestDescription": "간단한 단어에 대한 지식을 테스트하세요.",
+    "level3ReadingTitle": "레벨 3: 읽기",
+    "level3ReadingDescription": "점자 문장을 읽는 법을 배우세요.",
+    "level3WritingTitle": "레벨 3: 쓰기",
+    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요."
+  },
+  "levelPage": {
+    "level1LearningTitle": "레벨 1: 학습",
+    "level1LearningDescription": "각 글자의 점자 표현을 배우세요.",
+    "level1TestTitle": "레벨 1: 테스트",
+    "level1TestDescription": "점자 알파벳에 대한 지식을 테스트하세요.",
+    "level2LearningTitle": "레벨 2: 학습",
+    "level2LearningDescription": "단어 읽기 및 쓰기 연습을 하세요.",
+    "level2TestTitle": "레벨 2: 테스트",
+    "level2TestDescription": "간단한 단어에 대한 지식을 테스트하세요.",
+    "level3ReadingTitle": "레벨 3: 읽기",
+    "level3ReadingDescription": "점자 문장을 읽는 법을 배우세요.",
+    "level3WritingTitle": "레벨 3: 쓰기",
+    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요.",
+    "start": "시작하기"
+  },
+  "levelOverview": {
+    "start": "시작",
+    "startAriaLabel": "레벨 시작"
+  },
   "profile": {
     "title": "학습 진도",
     "subtitle": "점자 학습 여정을 추적하세요",

@@ -42,6 +42,40 @@ declare const messages: {
     "signInButtonAria": "Submit sign in form",
     "signinImageAlt": "Illustrative image for sign in page"
   },
+  "levelsDashboard": {
+    "pageTitle": "Choose a Braille Level",
+    "level1LearningTitle": "Level 1: Learning",
+    "level1LearningDescription": "Learn the braille representation of each letter.",
+    "level1TestTitle": "Level 1: Test",
+    "level1TestDescription": "Test your knowledge of the braille alphabet.",
+    "level2LearningTitle": "Level 2: Learning",
+    "level2LearningDescription": "Practice reading and writing words.",
+    "level2TestTitle": "Level 2: Test",
+    "level2TestDescription": "Test your knowledge of simple words.",
+    "level3ReadingTitle": "Level 3: Reading",
+    "level3ReadingDescription": "Learn how to read braille sentences.",
+    "level3WritingTitle": "Level 3: Writing",
+    "level3WritingDescription": "Learn how to write sentences with braille."
+  },
+  "levelPage": {
+    "level1LearningTitle": "Level 1: Learning",
+    "level1LearningDescription": "Learn the braille representation of each letter.",
+    "level1TestTitle": "Level 1: Test",
+    "level1TestDescription": "Test your knowledge of the braille alphabet.",
+    "level2LearningTitle": "Level 2: Learning",
+    "level2LearningDescription": "Practice reading and writing words.",
+    "level2TestTitle": "Level 2: Test",
+    "level2TestDescription": "Test your knowledge of simple words.",
+    "level3ReadingTitle": "Level 3: Reading",
+    "level3ReadingDescription": "Learn how to read braille sentences.",
+    "level3WritingTitle": "Level 3: Writing",
+    "level3WritingDescription": "Learn how to write sentences with braille.",
+    "start": "start"
+  },
+  "levelOverview": {
+    "start": "start",
+    "startAriaLabel": "Start level"
+  },
   "profile": {
     "title": "Your Learning Progress",
     "subtitle": "Track your journey in learning Braille",

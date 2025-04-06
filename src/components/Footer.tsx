@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -23,16 +22,14 @@ export default function Footer() {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="w-full bg-green-800 text-white border-t border-green-900 py-6 px-6 font-mono"
+      className="w-full bg-green-800 text-white border-t border-green-900 py-6 px-6 font-mono relative"
     >
       <h2 id="footer-heading" className="sr-only">
         {t("footerHeading")}
       </h2>
-      <div className="flex flex-col md:flex-row items-center justify-between text-center gap-2">
+      <div className="w-full text-center">
         <div>
-          <h1 className="text-sm">
-            {t("createdBy")}
-          </h1>
+          <h1 className="text-sm">{t("createdBy")}</h1>
           <a
             className="text-sm underline hover:text-gray-200"
             href="https://github.com/elainecui9/Wildhacks-2025"
@@ -42,6 +39,8 @@ export default function Footer() {
             {t("gitHub")}
           </a>
         </div>
+      </div>
+      <div className="absolute right-6 top-6">
         <select
           className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           onChange={(e) => onSelectChange(e.target.value)}
