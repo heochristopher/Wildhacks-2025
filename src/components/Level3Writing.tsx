@@ -11,13 +11,25 @@ export default function Level3Reading() {
   const [correctCount, setCorrectCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
+  const [currentDifficulty, setCurrentDifficulty] = useState("easy");
 
   useEffect(() => {
     const fetchSentences = async () => {
       try {
-        const res = await fetch("http://localhost:8000/generateContent/3?difficulty=easy&language=English");
+        // Get difficulty from dashboard
+        const res = await fetch("http://localhost:8000/dashboard", {
+          credentials: "include",
+        });
         const data = await res.json();
-        setSentences(data.content);
+        const difficulty = data.progress?.level3?.reading?.difficulty ?? "easy";
+        setCurrentDifficulty(difficulty);
+
+        // Get content using difficulty
+        const contentRes = await fetch(
+          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=English`
+        );
+        const contentData = await contentRes.json();
+        setSentences(contentData.content.slice(0, 3)); // Limit to 3
       } catch (err) {
         console.error("Failed to fetch sentences", err);
       } finally {
@@ -48,13 +60,42 @@ export default function Level3Reading() {
     }
   };
 
+  const submitProgress = async (score: number) => {
+    try {
+      const percent = (score + 1) / sentences.length;
+      let newDifficulty = currentDifficulty;
+
+      if (percent < 0.5) {
+        if (currentDifficulty === "medium") newDifficulty = "easy";
+        else if (currentDifficulty === "hard") newDifficulty = "medium";
+      } else if (percent > 0.8) {
+        if (currentDifficulty === "easy") newDifficulty = "medium";
+        else if (currentDifficulty === "medium") newDifficulty = "hard";
+      }
+
+      await fetch("http://localhost:8000/submitTest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 3,
+          score: percent.toFixed(2).toString(),
+          difficulty: newDifficulty,
+        }),
+      });
+    } catch (err) {
+      console.error("Error submitting test progress:", err);
+    }
+  };
+
   const nextQuestion = () => {
     setUserAnswer("");
     setAttempts(0);
     setFeedback("");
 
-    if (questionIndex >= 2) {
+    if (questionIndex >= sentences.length - 1) {
       setIsFinished(true);
+      submitProgress(correctCount);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
@@ -65,12 +106,12 @@ export default function Level3Reading() {
   }
 
   if (isFinished) {
-    return <EndOfTest score={{ correct: correctCount, total: 3 }} />;
+    return <EndOfTest score={{ correct: correctCount, total: sentences.length }} />;
   }
 
   return (
     <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Sentence {questionIndex + 1} of 3</h2>
+      <h2 className="text-xl mb-4">Sentence {questionIndex + 1} of {sentences.length}</h2>
       <h3 className="mb-2">Read and type this sentence exactly:</h3>
       <div className="text-lg font-semibold mb-6">"{currentSentence}"</div>
 

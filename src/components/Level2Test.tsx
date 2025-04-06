@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import EndOfTest from "./EndOfTest";
 
-export default function Level2Learning() {
+export default function Level2Test() {
+  const [currentDifficulty, setCurrentDifficulty] = useState("easy");
   const [questionNumber, setQuestionNumber] = useState(1);
   const [isFinished, setIsFinished] = useState(false);
   const [questions, setQuestions] = useState<string[]>([]);
@@ -12,23 +13,75 @@ export default function Level2Learning() {
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // 0 or 1
 
+  // Fetch progress and content
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchProgressAndContent = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:8000/generateContent/2?difficulty=easy&language=English"
-        );
+        const res = await fetch("http://localhost:8000/dashboard", {
+          credentials: "include",
+        });
         const data = await res.json();
-        setQuestions(data.content.slice(0, 10)); // Limit to 10 questions
+        const levelData = data.progress?.level2?.test;
+        const difficulty = levelData?.difficulty ?? "easy";
+
+        setCurrentDifficulty(difficulty);
+
+        const contentRes = await fetch(
+          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
+        );
+        const contentData = await contentRes.json();
+        setQuestions(contentData.content.slice(0, 10));
       } catch (err) {
-        console.error("Error fetching content:", err);
+        console.error("Failed to fetch progress/content:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchQuestions();
+    fetchProgressAndContent();
   }, []);
+
+  const submitProgress = async (score: number) => {
+    try {
+      const percent = (score+1) / 10;
+      let newDifficulty = currentDifficulty;
+
+      if (percent < 0.5) {
+        if (currentDifficulty === "medium") newDifficulty = "easy";
+        else if (currentDifficulty === "hard") newDifficulty = "medium";
+      } else if (percent > 0.8) {
+        if (currentDifficulty === "easy") newDifficulty = "medium";
+        else if (currentDifficulty === "medium") newDifficulty = "hard";
+      }
+
+      await fetch("http://localhost:8000/submitTest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 2,
+          score: percent.toFixed(2),
+          difficulty: newDifficulty,
+        }),
+      });
+      await fetch("http://localhost:8000/submitTest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 2,
+          score: percent.toFixed(2),
+          difficulty: newDifficulty,
+        }),
+      });
+    } catch (err) {
+      console.error("Error submitting progress:", err);
+    }
+  };
 
   const handleAnswer = () => {
     const currentWord = questions[questionNumber - 1]?.trim().toLowerCase();
@@ -53,6 +106,7 @@ export default function Level2Learning() {
     setAttempts(0);
     if (questionNumber >= 10) {
       setIsFinished(true);
+      submitProgress(correctCount);
     } else {
       setQuestionNumber((prev) => prev + 1);
     }
@@ -63,9 +117,7 @@ export default function Level2Learning() {
   }
 
   if (isFinished) {
-    return (
-      <EndOfTest score={{ correct: correctCount, total: 10 }} />
-    );
+    return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
   }
 
   const currentWord = questions[questionNumber - 1] || "Loading...";
