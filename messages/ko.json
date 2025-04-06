@@ -66,8 +66,7 @@
     "level3ReadingTitle": "레벨 3: 읽기",
     "level3ReadingDescription": "점자 문장을 읽는 법을 배우세요.",
     "level3WritingTitle": "레벨 3: 쓰기",
-    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요.",
-    "start": "시작하기"
+    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요."
   },
   "levelOverview": {
     "start": "시작",

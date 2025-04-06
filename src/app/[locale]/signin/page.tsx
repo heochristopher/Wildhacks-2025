@@ -24,7 +24,7 @@ export default function Signin() {
     });
 
     if (res.status === 200) {
-      router.push("/userdashboard");
+      router.push("/levels");
     }
   }
 

@@ -69,11 +69,11 @@ declare const messages: {
     "level3ReadingTitle": "Level 3: Reading",
     "level3ReadingDescription": "Learn how to read braille sentences.",
     "level3WritingTitle": "Level 3: Writing",
-    "level3WritingDescription": "Learn how to write sentences with braille.",
-    "start": "start"
+    "level3WritingDescription": "Learn how to write sentences with braille."
   },
   "levelOverview": {
-    "start": "start",
+    "start": "Pizza",
+    "buttonText": "Pizza",
     "startAriaLabel": "Start level"
   },
   "profile": {
