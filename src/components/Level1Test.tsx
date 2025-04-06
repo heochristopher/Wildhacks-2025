@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
 
 
-
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -29,11 +28,23 @@ export default function Level1Test() {
   const [isComposing, setIsComposing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Shuffle the alphabet once on mount
   useEffect(() => {
     setShuffledAlphabet(shuffle(alphabet));
   }, []);
 
   const currentLetter = shuffledAlphabet[questionIndex];
+
+  // Speak the current letter whenever it changes
+  useEffect(() => {
+    if (currentLetter) {
+      window.speechSynthesis.cancel(); // Cancel any ongoing speech
+      const utterance = new SpeechSynthesisUtterance(currentLetter);
+      utterance.lang = "en-US";
+      utterance.rate = 0.75; // adjust rate as needed
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [currentLetter]);
 
   const handleAnswer = () => {
     if (isSubmitting || isComposing) return;

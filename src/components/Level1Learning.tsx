@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
@@ -9,12 +9,21 @@ export default function Level1Learning() {
   // Get the letters from translations (could be Hangul or English)
   const alphabet = t("letters").split("");
 
+
   const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isFinished, setIsFinished] = useState(false);
 
   const currentLetter = alphabet[questionIndex];
+
+    useEffect(() => {
+    window.speechSynthesis.cancel(); // cancel any ongoing speech
+    const utterance = new SpeechSynthesisUtterance(currentLetter);
+      utterance.lang = "en-US"; // adjust language as needed
+      utterance.rate = 0.75; // adjust rate as needed
+    window.speechSynthesis.speak(utterance);
+  }, [currentLetter]);
 
   const handleAnswer = () => {
     const trimmedInput = userAnswer.trim();

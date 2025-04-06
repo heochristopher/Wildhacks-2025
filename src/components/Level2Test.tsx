@@ -14,6 +14,7 @@ export default function Level2Test() {
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // 0 or 1
 
+  // Fetch questions on mount
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -32,11 +33,24 @@ export default function Level2Test() {
     fetchQuestions();
   }, []);
 
-  const handleAnswer = () => {
-    const currentWord = questions[questionNumber - 1]?.trim().toLowerCase();
-    const answer = userAnswer.trim().toLowerCase();
+  // Compute current word
+  // const currentWord = questions[questionNumber - 1] || "Loading...";
 
-    if (answer === currentWord) {
+  // When currentWord changes, speak it using the Speech Synthesis API
+  useEffect(() => {
+    if (!isLoading && questions.length > 0) {
+      window.speechSynthesis.cancel(); // Cancel any ongoing speech
+      const utterance = new SpeechSynthesisUtterance(currentWord);
+      utterance.lang = "en-US"; // Adjust the language if needed
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [currentWord, isLoading, questions]);
+
+  const handleAnswer = () => {
+    const trimmedAnswer = userAnswer.trim().toLowerCase();
+    const expectedAnswer = currentWord.trim().toLowerCase();
+
+    if (trimmedAnswer === expectedAnswer) {
       setCorrectCount((prev) => prev + 1);
       setFeedback(t("feedbackCorrect"));
       nextQuestion();

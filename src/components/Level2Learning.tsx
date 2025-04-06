@@ -13,22 +13,37 @@ export default function Level2Learning() {
   const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:8000/generateContent/2?difficulty=easy&language=English"
-        );
-        const data = await res.json();
-        setQuestions(data.content); // assuming data.content is the array
-      } catch (err) {
-        console.error("Error fetching content:", err);
-      } finally {
-        setIsLoading(false);
+    async function fetchAndSpeak() {
+      // Fetch questions only if still loading.
+      if (isLoading) {
+        try {
+          const res = await fetch(
+            "http://localhost:8000/generateContent/2?difficulty=easy&language=English"
+          );
+          const data = await res.json();
+          setQuestions(data.content); // assuming data.content is an array of words
+        } catch (err) {
+          console.error("Error fetching content:", err);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    };
+      // Once questions are loaded, speak the current word.
+      if (!isLoading && questions.length > 0) {
+        const currentWord = questions[questionNumber - 1];
+        if (currentWord) {
+          // Cancel any ongoing speech before starting a new utterance.
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(currentWord);
+          utterance.lang = "en-US"; // adjust language as needed
+          utterance.rate = 0.75; // adjust rate as needed
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+    }
+    fetchAndSpeak();
+  }, [isLoading, questions, questionNumber]);
 
-    fetchQuestions();
-  }, []);
 
   const handleAnswer = () => {
     const currentWord = questions[questionNumber - 1]?.trim().toLowerCase();

@@ -19,23 +19,25 @@ export default function Level3Reading() {
   const [attempts, setAttempts] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // Fetch sentence pairs and their associated questions on mount.
   useEffect(() => {
     const fetchSentencesAndQuestions = async () => {
       try {
         const res = await fetch("http://localhost:8000/generateContent/3");
         const data = await res.json();
         const sentenceArray: string[] = data.content;
-        const questionPairs: SentencePair[] = [];
-
-        for (const sentence of sentenceArray) {
-          const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sentence }),
-          });
-          const q = await res.json();
-          questionPairs.push({ sentence, question: q.question });
-        }
+        // Fetch questions concurrently for each sentence.
+        const questionPairs: SentencePair[] = await Promise.all(
+          sentenceArray.map(async (sentence) => {
+            const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sentence }),
+            });
+            const q = await res.json();
+            return { sentence, question: q.question };
+          })
+        );
 
         setSentencePairs(questionPairs);
       } catch (err) {
@@ -49,6 +51,27 @@ export default function Level3Reading() {
   }, []);
 
   const currentPair = sentencePairs[questionIndex];
+
+  // Use Speech Synthesis to say the question, then after 1 second say the answer.
+  useEffect(() => {
+    if (!loading && currentPair) {
+      // Cancel any ongoing speech.
+      window.speechSynthesis.cancel();
+
+      // After 1 second, speak the sentence (answer).
+      const answerUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
+      answerUtterance.lang = "en-US";
+      answerUtterance.rate = 0.75; // adjust rate as needed
+      window.speechSynthesis.speak(answerUtterance);
+
+      setTimeout(() => {
+        const questionUtterance = new SpeechSynthesisUtterance(currentPair.question);
+        questionUtterance.lang = "en-US";
+        questionUtterance.rate = 0.75; // adjust rate as needed
+        window.speechSynthesis.speak(questionUtterance);
+       }, 2000)
+    }
+  }, [currentPair, loading]);
 
   const handleSubmit = async () => {
     if (!currentPair) return;
