@@ -15,6 +15,30 @@
     "title": "오류가 발생했습니다!",
     "description": "오류가 발생했습니다. 다시 시도해주세요."
   },
+  "homepage": {
+    "description": "당신의 속도에 맞춰 학습하며 촉각 능력을 향상시키는 인터랙티브 점자 학습을 경험해 보세요.",
+    "getStarted": "시작하기",
+    "skipToContent": "주요 내용으로 건너뛰기",
+    "backgroundAriaLabel": "점자 학습 환경을 보여주는 장식적인 배경",
+    "getStartedAriaLabel": "점자 학습 시작하기",
+    "logoAlt": "DotByDot - 인터랙티브 점자 학습 플랫폼"
+  },
+  "footer": {
+    "footerHeading": "푸터",
+    "createdBy": "제작: 허남윤, 김하요, 정태인, 수이린",
+    "gitHub": "깃허브",
+    "languageSelectAriaLabel": "언어 선택"
+  },
+  "auth": {
+    "signInTitle": "계정에 로그인",
+    "notMember": "회원이 아니신가요?",
+    "registerLink": "무료로 가입하기",
+    "emailLabel": "이메일 주소",
+    "passwordLabel": "비밀번호",
+    "signInButton": "로그인",
+    "signInButtonAria": "로그인 폼 제출",
+    "signinImageAlt": "로그인 페이지를 설명하는 이미지"
+  },
   "profile": {
     "title": "학습 진도",
     "subtitle": "점자 학습 여정을 추적하세요",
