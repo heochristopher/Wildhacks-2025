@@ -17,6 +17,7 @@ export default function Level3Reading() {
   const [attempts, setAttempts] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // Fetch sentence pairs and their associated questions on mount.
   useEffect(() => {
     const fetchSentencesAndQuestions = async () => {
       try {
@@ -24,17 +25,18 @@ export default function Level3Reading() {
         const data = await res.json();
 
         const sentenceArray: string[] = data.content;
-        const questionPairs: SentencePair[] = [];
-
-        for (const sentence of sentenceArray) {
-          const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sentence }),
-          });
-          const q = await res.json();
-          questionPairs.push({ sentence, question: q.question });
-        }
+        // Fetch questions concurrently for each sentence.
+        const questionPairs: SentencePair[] = await Promise.all(
+          sentenceArray.map(async (sentence) => {
+            const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ sentence }),
+            });
+            const q = await res.json();
+            return { sentence, question: q.question };
+          })
+        );
 
         setSentencePairs(questionPairs);
       } catch (err) {
@@ -49,40 +51,65 @@ export default function Level3Reading() {
 
   const currentPair = sentencePairs[questionIndex];
 
+  // Use Speech Synthesis to say the question, then after 1 second say the answer.
+  useEffect(() => {
+    if (!loading && currentPair) {
+      // Cancel any ongoing speech.
+      window.speechSynthesis.cancel();
+
+      // After 1 second, speak the sentence (answer).
+      const answerUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
+      answerUtterance.lang = "en-US";
+      answerUtterance.rate = 0.75; // adjust rate as needed
+      window.speechSynthesis.speak(answerUtterance);
+
+      setTimeout(() => {
+        const questionUtterance = new SpeechSynthesisUtterance(currentPair.question);
+        questionUtterance.lang = "en-US";
+        questionUtterance.rate = 0.75; // adjust rate as needed
+        window.speechSynthesis.speak(questionUtterance);
+       }, 2000)
+    }
+  }, [currentPair, loading]);
+
   const handleSubmit = async () => {
     if (!currentPair) return;
 
-    const res = await fetch("http://localhost:8000/generateContent/checkAnswer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sentence: currentPair.sentence,
-        question: currentPair.question,
-        answer: userAnswer,
-      }),
-    });
+    try {
+      const res = await fetch("http://localhost:8000/generateContent/checkAnswer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sentence: currentPair.sentence,
+          question: currentPair.question,
+          answer: userAnswer,
+        }),
+      });
 
-    const data = await res.json();
-    const verdict = data.verdict;
+      const data = await res.json();
+      const verdict = data.verdict;
 
-    if (verdict === "Correct") {
-      setCorrectCount((prev) => prev + 1);
-      setFeedback("✅ Correct!");
-      next();
-    } else if (attempts === 0) {
-      setFeedback("❌ Incorrect. One more try!");
-      setAttempts(1);
-      setUserAnswer("");
-    } else {
-      setFeedback("❌ Incorrect again.");
-      next();
+      if (verdict === "Correct") {
+        setCorrectCount((prev) => prev + 1);
+        setFeedback("✅ Correct!");
+        next();
+      } else if (attempts === 0) {
+        setFeedback("❌ Incorrect. One more try!");
+        setAttempts(1);
+        setUserAnswer("");
+      } else {
+        setFeedback("❌ Incorrect again.");
+        next();
+      }
+    } catch (error) {
+      console.error("Error checking answer:", error);
+      setFeedback("Error checking answer.");
     }
   };
 
   const next = () => {
     setAttempts(0);
     setUserAnswer("");
-
     if (questionIndex >= sentencePairs.length - 1) {
       setIsFinished(true);
     } else {
@@ -90,13 +117,19 @@ export default function Level3Reading() {
     }
   };
 
-  if (loading) return <div className="p-10 font-mono">Loading reading activity...</div>;
+  if (loading) {
+    return <div className="p-10 font-mono">Loading reading activity...</div>;
+  }
 
-  if (isFinished) return <EndOfTest score={{ correct: correctCount, total: sentencePairs.length }} />;
+  if (isFinished) {
+    return <EndOfTest score={{ correct: correctCount, total: sentencePairs.length }} />;
+  }
 
   return (
     <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Reading {questionIndex + 1} of {sentencePairs.length}</h2>
+      <h2 className="text-xl mb-4">
+        Reading {questionIndex + 1} of {sentencePairs.length}
+      </h2>
       <p className="text-lg mb-2">{currentPair.sentence}</p>
       <p className="mb-4">{currentPair.question}</p>
 

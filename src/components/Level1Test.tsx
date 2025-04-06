@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import EndOfTest from "./EndOfTest";
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -22,14 +22,26 @@ export default function Level1Test() {
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // to track up to 2 tries
 
+  // Shuffle the alphabet once on mount
   useEffect(() => {
     setShuffledAlphabet(shuffle(alphabet));
   }, []);
 
   const currentLetter = shuffledAlphabet[questionIndex];
 
+  // Speak the current letter whenever it changes
+  useEffect(() => {
+    if (currentLetter) {
+      window.speechSynthesis.cancel(); // Cancel any ongoing speech
+      const utterance = new SpeechSynthesisUtterance(currentLetter);
+      utterance.lang = "en-US";
+      utterance.rate = 0.75; // adjust rate as needed
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [currentLetter]);
+
   const handleAnswer = () => {
-    const trimmed = userAnswer.trim().toUpperCase();
+    const trimmed = userAnswer.trim().toLocaleLowerCase();
 
     if (trimmed === currentLetter) {
       setCorrectCount((prev) => prev + 1);
@@ -40,7 +52,7 @@ export default function Level1Test() {
       setAttempts(1);
       setUserAnswer("");
     } else {
-      setFeedback(`❌ Incorrect again. `);
+      setFeedback(`❌ Incorrect again.`);
       nextQuestion();
       setUserAnswer("");
     }
@@ -69,7 +81,7 @@ export default function Level1Test() {
 
   return (
     <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Letter {questionIndex + 1} of 26</h2>
+      <h2 className="text-xl mb-4">Letter {questionIndex + 1} of {shuffledAlphabet.length}</h2>
       <h3 className="mb-2">Read the letter and then type it back:</h3>
       <div className="text-4xl font-bold mb-6">{currentLetter}</div>
 

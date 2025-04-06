@@ -12,10 +12,13 @@ export default function Level3Reading() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFinished, setIsFinished] = useState(false);
 
+  // Fetch sentences on mount.
   useEffect(() => {
     const fetchSentences = async () => {
       try {
-        const res = await fetch("http://localhost:8000/generateContent/3?difficulty=easy&language=English");
+        const res = await fetch(
+          "http://localhost:8000/generateContent/3?difficulty=easy&language=English"
+        );
         const data = await res.json();
         setSentences(data.content);
       } catch (err) {
@@ -30,6 +33,17 @@ export default function Level3Reading() {
 
   const currentSentence = sentences[questionIndex]?.trim();
 
+  // Speak the current sentence when it changes.
+  useEffect(() => {
+    if (currentSentence) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(currentSentence);
+      utterance.lang = "en-US";
+      utterance.rate = 0.75; // Adjust rate as needed.
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [currentSentence]);
+
   const handleAnswer = () => {
     const user = userAnswer.trim().toLowerCase();
     const expected = currentSentence?.toLowerCase();
@@ -37,14 +51,31 @@ export default function Level3Reading() {
     if (user === expected) {
       setCorrectCount((prev) => prev + 1);
       setFeedback("✅ Correct!");
-      nextQuestion();
+      const utterance = new SpeechSynthesisUtterance("Correct!");
+      utterance.lang = "en-US";
+      utterance.rate = 0.75;
+      utterance.onend = () => {
+        setTimeout(() => {nextQuestion();}, 1000)
+      };
+      window.speechSynthesis.speak(utterance);
     } else if (attempts === 0) {
       setFeedback("❌ Incorrect. One more try!");
+      const utterance = new SpeechSynthesisUtterance("Incorrect. One more try!");
+      utterance.lang = "en-US";
+      utterance.rate = 0.75;
+      window.speechSynthesis.speak(utterance);
       setAttempts(1);
       setUserAnswer("");
     } else {
       setFeedback("❌ Incorrect again.");
-      nextQuestion();
+      const utterance = new SpeechSynthesisUtterance("Incorrect. Next question!");
+      utterance.lang = "en-US";
+      utterance.rate = 0.75;
+      // Wait until the utterance finishes before moving on.
+      utterance.onend = () => {
+        setTimeout(() => {nextQuestion();}, 1000)
+      };
+      window.speechSynthesis.speak(utterance);
     }
   };
 

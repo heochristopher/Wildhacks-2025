@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EndOfLevel from "./EndOfLevel";
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 export default function Level1Test() {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -12,8 +12,16 @@ export default function Level1Test() {
 
   const currentLetter = alphabet[questionIndex];
 
+    useEffect(() => {
+    window.speechSynthesis.cancel(); // cancel any ongoing speech
+    const utterance = new SpeechSynthesisUtterance(currentLetter);
+      utterance.lang = "en-US"; // adjust language as needed
+      utterance.rate = 0.75; // adjust rate as needed
+    window.speechSynthesis.speak(utterance);
+  }, [currentLetter]);
+
   const handleAnswer = () => {
-    if (userAnswer.trim().toUpperCase() === currentLetter) {
+    if (userAnswer.trim().toLocaleLowerCase() === currentLetter) {
       setFeedback("");
       setUserAnswer("");
 
