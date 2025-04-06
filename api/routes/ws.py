@@ -1,3 +1,4 @@
+import json
 import asyncio
 import serial
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -7,52 +8,77 @@ router = APIRouter(tags=["WebSocket"])
 # Initialize serial connection to Arduino (update the port as needed)
 ser = serial.Serial('/dev/tty.usbmodem1101', 9600, timeout=1)
 
-@router.websocket("/ws/keyboard")
-async def keyboard_websocket(websocket: WebSocket):
+def binary_string_to_bytes(binary_string: str) -> bytes:
     """
-    WebSocket endpoint for keyboard input.
-    This endpoint reads data from the Arduino (e.g., from a custom keyboard) via the serial port 
-    and streams it to the client.
+    Convert a binary string (e.g. "01001010") to bytes.
+    If the string length is not a multiple of 8, pad with leading zeros.
     """
-    await websocket.accept()
-    print("Client connected for keyboard events")
-    
-    try:
-        while True:
-            # Check if there's data from the Arduino (keyboard input)
-            if ser.in_waiting:
-                line = ser.readline().decode('utf-8').strip()
-                # Send the keyboard input to the client as plain text
-                await websocket.send_text(line)
-            # Brief sleep to prevent busy waiting
-            await asyncio.sleep(0.1)
-    except WebSocketDisconnect:
-        print("Client disconnected from keyboard endpoint")
-    except Exception as e:
-        print(f"Error in keyboard WebSocket: {e}")
+    if len(binary_string) % 8 != 0:
+        padding_length = 8 - (len(binary_string) % 8)
+        binary_string = "0" * padding_length + binary_string
+    # Split the string into chunks of 8 bits and convert to bytes
+    byte_chunks = [binary_string[i:i+8] for i in range(0, len(binary_string), 8)]
+    return bytes(int(chunk, 2) for chunk in byte_chunks)
 
-@router.websocket("/ws/lcd")
-async def lcd_websocket(websocket: WebSocket):
-    """
-    WebSocket endpoint for LCD commands.
-    This endpoint receives raw binary data from the client (via WebSocket binary frames) 
-    and writes the data directly to the Arduino's serial port for updating the LCD display.
-    """
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    print("Client connected for LCD binary commands")
-    
-    try:
-        while True:
-            # Wait for binary data from the client
-            binary_data = await websocket.receive_bytes()
-            print(f"Received binary data for LCD: {binary_data}")
-            
-            # Write the received binary data to the Arduino for the LCD display
-            ser.write(binary_data)
-            
-            # Optionally, send an acknowledgement back to the client
-            await websocket.send_text("LCD command sent")
-    except WebSocketDisconnect:
-        print("Client disconnected from LCD endpoint")
-    except Exception as e:
-        print(f"Error in LCD WebSocket: {e}")
+    print("Client connected via WebSocket")
+
+    async def send_serial_data():
+        """
+        Read from the serial port (keyboard input) and forward to the client.
+        """
+        try:
+            while True:
+                if ser.in_waiting:
+                    # Read a line from the Arduino and decode it
+                    line = ser.readline().decode('utf-8').strip()
+                    # Create a JSON message with type "keyboard"
+                    message = {"type": "keyboard", "payload": line}
+                    await websocket.send_json(message)
+                await asyncio.sleep(0.1)
+        except Exception as e:
+            error_msg = {"type": "error", "payload": f"Serial read error: {str(e)}"}
+            await websocket.send_json(error_msg)
+
+    async def receive_client_messages():
+        """
+        Listen for incoming messages from the client and process them.
+        For LCD commands, the client should send a JSON message with type "lcd".
+        """
+        try:
+            while True:
+                message_text = await websocket.receive_text()
+                try:
+                    data = json.loads(message_text)
+                except json.JSONDecodeError as e:
+                    await websocket.send_json({"type": "error", "payload": "Invalid JSON format"})
+                    continue
+
+                message_type = data.get("type")
+                payload = data.get("payload")
+
+                if message_type == "lcd":
+                    try:
+                        # Convert the binary string to bytes and send to Arduino
+                        binary_bytes = binary_string_to_bytes(payload)
+                        ser.write(binary_bytes)
+                        # Optionally, acknowledge receipt
+                        await websocket.send_json({"type": "ack", "payload": "LCD command sent"})
+                    except Exception as e:
+                        await websocket.send_json({"type": "error", "payload": f"Error sending LCD command: {str(e)}"})
+                else:
+                    # Handle unknown message types
+                    await websocket.send_json({"type": "error", "payload": "Unknown message type"})
+        except WebSocketDisconnect:
+            print("Client disconnected")
+        except Exception as e:
+            await websocket.send_json({"type": "error", "payload": f"Error processing message: {str(e)}"})
+
+    # Run both tasks concurrently
+    send_task = asyncio.create_task(send_serial_data())
+    recv_task = asyncio.create_task(receive_client_messages())
+
+    # Wait until one of the tasks terminates (e.g. client disconnects)
+    await asyncio.gather(send_task, recv_task)
