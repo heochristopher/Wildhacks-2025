@@ -1,6 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from utils.auth import get_current_user
 from services import content_generator
+from pydantic import BaseModel
+
+class SentenceRequest(BaseModel):
+    sentence: str
+    
+class AnswerCheckRequest(BaseModel):
+    sentence: str
+    question: str
+    answer: str
+
 
 router = APIRouter(
     prefix="/generateContent",
@@ -23,12 +33,11 @@ async def generate_new_content(
     return {"content": content}
 
 @router.post("/generateQuestion", summary="Generate a question from a sentence")
-async def generate_question(sentence: str):
-    question = content_generator.generate_question_from_sentence(sentence)
+async def generate_question(data: SentenceRequest):
+    question = content_generator.generate_question_from_sentence(data.sentence)
     return {"question": question}
 
 @router.post("/checkAnswer", summary="Check if answer is correct")
-async def check_answer(sentence: str, question: str, answer: str):
-    verdict = content_generator.check_answer(sentence, question, answer)
+async def check_answer(data: AnswerCheckRequest):
+    verdict = content_generator.check_answer(data.sentence, data.question, data.answer)
     return {"verdict": verdict}
-
