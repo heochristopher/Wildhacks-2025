@@ -74,7 +74,7 @@ export default function Home() {
               />
             </div>
 
-            <h1 id="main-heading" className="text-black text-3xl pb-20 font-bold text-center">
+            <h1 tabIndex={0} id="main-heading" className="text-black text-3xl pb-20 font-bold text-center">
               {t("description")}
             </h1>
 

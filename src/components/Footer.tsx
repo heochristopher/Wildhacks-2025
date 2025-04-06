@@ -3,8 +3,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const languages = [
-  { code: "en", label: "🇺🇸 English" },
-  { code: "ko", label: "🇰🇷 한국어" },
+  { code: "en", label: "English" },
+  { code: "ko", label: "한국어" },
 ];
 
 export default function Footer() {
@@ -29,8 +29,9 @@ export default function Footer() {
       </h2>
       <div className="w-full text-center">
         <div>
-          <h1 className="text-sm">{t("createdBy")}</h1>
+          <h1 tabIndex={0} className="text-sm">{t("createdBy")}</h1>
           <a
+            tabIndex={0}
             className="text-sm underline hover:text-gray-200"
             href="https://github.com/elainecui9/Wildhacks-2025"
             target="_blank"

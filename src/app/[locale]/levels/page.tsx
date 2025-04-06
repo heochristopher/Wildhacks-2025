@@ -9,40 +9,40 @@ export default function LevelsDashboard() {
   const levels = [
     {
       id: "1",
-      title: t("level1LearningTitle", "Level 1: Learning"),
-      description: t("level1LearningDescription", "Learn the braille representation of each letter."),
+      title: t("level1LearningTitle"),
+      description: t("level1LearningDescription"),
     },
     {
       id: "2",
-      title: t("level1TestTitle", "Level 1: Test"),
-      description: t("level1TestDescription", "Test your knowledge of the braille alphabet."),
+      title: t("level1TestTitle"),
+      description: t("level1TestDescription"),
     },
     {
       id: "3",
-      title: t("level2LearningTitle", "Level 2: Learning"),
-      description: t("level2LearningDescription", "Practice reading and writing words."),
+      title: t("level2LearningTitle"),
+      description: t("level2LearningDescription"),
     },
     {
       id: "4",
-      title: t("level2TestTitle", "Level 2: Test"),
-      description: t("level2TestDescription", "Test your knowledge of simple words."),
+      title: t("level2TestTitle"),
+      description: t("level2TestDescription"),
     },
     {
       id: "5",
-      title: t("level3ReadingTitle", "Level 3: Reading"),
-      description: t("level3ReadingDescription", "Learn how to read braille sentences."),
+      title: t("level3ReadingTitle"),
+      description: t("level3ReadingDescription"),
     },
     {
       id: "6",
-      title: t("level3WritingTitle", "Level 3: Writing"),
-      description: t("level3WritingDescription", "Learn how to write sentences with braille."),
+      title: t("level3WritingTitle"),
+      description: t("level3WritingDescription"),
     },
   ];
 
   return (
     <div className="min-h-screen p-10 bg-gray-100 font-mono">
       <h1 className="text-4xl font-bold text-center mb-10">
-        {t("pageTitle", "Choose a Braille Level")}
+        {t("pageTitle")}
       </h1>
       <div className="grid gap-6 md:grid-cols-3">
         {levels.map((level) => (
