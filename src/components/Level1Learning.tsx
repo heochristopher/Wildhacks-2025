@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
@@ -13,7 +13,8 @@ import EndOfLevel from "./EndOfLevel";
   const [feedback, setFeedback] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const [isComposing, setIsComposing] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+      const [arduinoInput, setArduinoInput] = useState("");
 
   const currentLetter =
     questionIndex !== null ? alphabet[questionIndex] : undefined;
@@ -80,7 +81,39 @@ import EndOfLevel from "./EndOfLevel";
       utterance.lang = "en-US"; // adjust language as needed
       utterance.rate = 0.75; // adjust rate as needed
     window.speechSynthesis.speak(utterance);
-  }, [currentLetter]);
+    }, [currentLetter]);
+    
+    const handleArduinoInput = useCallback(
+    (input: string) => {
+      // Prevent processing if already submitting.
+      if (isSubmitting || questionIndex === null) return;
+
+      setArduinoInput(input);
+
+      // For Latin letters, normalize to uppercase.
+      const isLatin = /^[A-Za-z]$/.test(currentLetter || "");
+      const expectedLetter = isLatin ? currentLetter?.toUpperCase() : currentLetter;
+      const actualInput = isLatin ? input.toUpperCase() : input;
+
+      if (actualInput === expectedLetter) {
+        setFeedback("");
+        // Clear the displayed Arduino input (if desired).
+        setArduinoInput("");
+
+        if (questionIndex === alphabet.length - 1) {
+          submitProgress(questionIndex);
+          setIsFinished(true);
+        } else {
+          setQuestionIndex((prev) => (prev !== null ? prev + 1 : 0));
+        }
+      } else {
+        setFeedback(t("feedbackIncorrect"));
+        // Optionally clear the input or keep it for the user to see.
+        setArduinoInput("");
+      }
+    },
+    [alphabet.length, currentLetter, isSubmitting, questionIndex, t]
+  );
 
   const handleAnswer = () => {
     if (isSubmitting || isComposing) return;
@@ -109,6 +142,31 @@ import EndOfLevel from "./EndOfLevel";
       setUserAnswer("");
     }
   };
+      useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8000/ws");
+    ws.onopen = () => {
+      console.log("WebSocket connection established for Arduino keyboard input.");
+    };
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("Received message from Arduino:", data);
+        // Expect messages with type "keyboard" and payload as a character.
+        if (data.type === "keyboard" && typeof data.payload === "string") {
+          // Process each incoming character.
+          handleArduinoInput(data.payload);
+        }
+      } catch (error) {
+        console.error("Error processing WebSocket message:", error);
+      }
+    };
+    ws.onerror = (err) => console.error("WebSocket error:", err);
+    ws.onclose = () => console.log("WebSocket connection closed.");
+
+    return () => {
+      ws.close();
+    };
+  }, [handleArduinoInput]);
 
   if (questionIndex === null) {
     return <div className="p-10 font-mono">Loading your progress...</div>;
