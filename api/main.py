@@ -1,18 +1,13 @@
 from fastapi import FastAPI
-from routes import auth, dashboard, levels, language, lcd_ws_server
+from routes import auth, dashboard, levels, language, ws, generateContent, lcd_ws_server
 
 app = FastAPI()
 
 app.include_router(auth.router)
 app.include_router(dashboard.router)
 app.include_router(levels.router)
-<<<<<<< HEAD
-<<<<<<< HEAD
 app.include_router(generateContent.router)
-=======
 app.include_router(language.router)
->>>>>>> 47beae3 (.)
-=======
+
 app.include_router(language.router)
 app.include_router(lcd_ws_server.router)
->>>>>>> 5f4a1b7 (..)
