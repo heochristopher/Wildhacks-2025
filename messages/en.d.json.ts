@@ -18,6 +18,30 @@ declare const messages: {
     "title": "Something went wrong!",
     "description": "An error occurred. Please try again."
   },
+  "homepage": {
+    "description": "Experience interactive Braille learning that adapts to your pace and enhances tactile skills.",
+    "getStarted": "Get Started",
+    "skipToContent": "Skip to main content",
+    "backgroundAriaLabel": "Decorative background showing braille learning environment",
+    "getStartedAriaLabel": "Get started with Braille learning",
+    "logoAlt": "DotByDot - Interactive Braille Learning Platform"
+  },
+  "footer": {
+    "footerHeading": "Footer",
+    "createdBy": "Created By: Chris Heo, Hajo Wolfram, Anthony Chung, Elaine Cui",
+    "gitHub": "GitHub",
+    "languageSelectAriaLabel": "Select language"
+  },
+  "auth": {
+    "signInTitle": "Sign in to your account",
+    "notMember": "Not a member?",
+    "registerLink": "Register for Free",
+    "emailLabel": "Email address",
+    "passwordLabel": "Password",
+    "signInButton": "Sign in",
+    "signInButtonAria": "Submit sign in form",
+    "signinImageAlt": "Illustrative image for sign in page"
+  },
   "profile": {
     "title": "Your Learning Progress",
     "subtitle": "Track your journey in learning Braille",
