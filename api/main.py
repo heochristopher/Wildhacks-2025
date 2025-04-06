@@ -8,6 +8,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://localhost:3001"
+    "https://dotby.tech"
     # Add any other origins you need to allow
 ]
 
