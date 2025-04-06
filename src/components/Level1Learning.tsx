@@ -123,7 +123,7 @@ import EndOfLevel from "./EndOfLevel";
       </h3>
 
       {/* Current letter displayed with polite live region */}
-      <div className="text-4xl font-bold mb-6" aria-live="polite">
+      <div tabIndex={0} className="text-4xl font-bold mb-6" aria-live="polite">
         {currentLetter}
       </div>
 

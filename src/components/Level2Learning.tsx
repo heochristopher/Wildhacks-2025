@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
-import EndOfLevel from "./EndOfLevel";
+import EndOfTest from "./EndOfTest";
 
 export default function Level2Learning() {
   const t = useTranslations("level2Learning");
@@ -12,6 +12,9 @@ export default function Level2Learning() {
   const [isLoading, setIsLoading] = useState(true);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
+  
+  // Create a ref for the input to auto-focus it.
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Load progress & questions
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function Level2Learning() {
         const data = await res.json();
 
         const progressData = data.progress?.level2?.learning ?? {};
-        const difficulty = data.progress?.level2?.test.difficulty ?? "easy";
+        const difficulty = data.progress?.level2?.test?.difficulty ?? "easy";
         const lastCompleted = progressData.lastCompleted ?? 0;
 
         setCurrentDifficulty(difficulty);
@@ -40,46 +43,33 @@ export default function Level2Learning() {
       } finally {
         setIsLoading(false);
       }
-      // Once questions are loaded, speak the current word.
-      if (!isLoading && questions.length > 0) {
-        const currentWord = questions[questionNumber];
-        if (currentWord) {
-          // Cancel any ongoing speech before starting a new utterance.
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(currentWord);
-          utterance.lang = "en-US"; // adjust language as needed
-          utterance.rate = 0.75; // adjust rate as needed
-          window.speechSynthesis.speak(utterance);
-        }
-      }
-    }
-
+    };
 
     fetchData();
-  }, []);
+  }, [t]);
 
-  // Submit progress to FastAPI
-  const submitProgress = async (index: number) => {
-    try {
-      await fetch("http://localhost:8000/updateScore", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          level: 2,
-          score: "-1",
-          lastCompleted: index,
-          questions: questions.slice(index)
-        }),
-      });
-    } catch (err) {
-      console.error("Failed to update progress:", err);
+  // Auto-focus the input field whenever a new question is loaded.
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
-  };
+  }, [questionNumber]);
 
-  // Save on unload
+  // When questions are loaded, speak the current word.
+  useEffect(() => {
+    if (!isLoading && questions.length > 0 && questionNumber !== null) {
+      const currentWord = questions[questionNumber];
+      if (currentWord) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(currentWord);
+        utterance.lang = "en-US";
+        utterance.rate = 0.75;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [isLoading, questions, questionNumber]);
+
+  // Save progress on unload.
   useEffect(() => {
     if (questionNumber === null) return;
 
@@ -94,6 +84,26 @@ export default function Level2Learning() {
     };
   }, [questionNumber]);
 
+  const submitProgress = async (index: number) => {
+    try {
+      await fetch("http://localhost:8000/updateScore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 2,
+          score: "-1",
+          lastCompleted: index,
+          questions: questions.slice(index),
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+    }
+  };
+
   const handleAnswer = () => {
     const currentWord = questions[questionNumber!]?.trim().toLowerCase();
     const answer = userAnswer.trim().toLowerCase();
@@ -103,7 +113,6 @@ export default function Level2Learning() {
       setUserAnswer("");
 
       const nextIndex = questionNumber! + 1;
-
       if (nextIndex >= questions.length) {
         submitProgress(nextIndex);
         setIsFinished(true);
@@ -124,11 +133,9 @@ export default function Level2Learning() {
     );
   }
 
-  if (isFinished) return <EndOfLevel />;
+  if (isFinished) return <EndOfTest />;
 
   const currentWord = questions[questionNumber] || t("loadingFallback");
-  console.log(questionNumber);
-  console.log(currentWord);
 
   return (
     <main
@@ -139,24 +146,24 @@ export default function Level2Learning() {
       <h2 id="questionCount" className="text-xl mb-4">
         {t("questionCount", { current: questionNumber + 1, total: 10 })}
       </h2>
-      
+
       {/* Instructions */}
       <h3 id="instruction" className="mb-2">
         {t("instruction")}
       </h3>
-      
+
       {/* Display current word */}
       <div className="text-2xl mb-6 font-semibold" aria-live="polite">
         {currentWord}
       </div>
 
-      {/* Hidden label for input field */}
+      {/* Hidden label for screen readers */}
       <label htmlFor="userAnswer" className="sr-only">
         {t("inputLabel")}
       </label>
-      
       <input
         id="userAnswer"
+        ref={inputRef}
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
@@ -165,7 +172,17 @@ export default function Level2Learning() {
             handleAnswer();
           }
         }}
-        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
+        onFocus={() => {
+          // When input is focused, speak the current word aloud.
+          if (currentWord) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(currentWord);
+            utterance.lang = "en-US";
+            utterance.rate = 0.75;
+            window.speechSynthesis.speak(utterance);
+          }
+        }}
+        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
         placeholder={t("inputPlaceholder")}
         maxLength={50}
         aria-labelledby="instruction questionCount"
@@ -173,7 +190,7 @@ export default function Level2Learning() {
 
       {/* Feedback message */}
       {feedback && (
-        <p role="alert" className="text-red-600 mb-2">
+        <p role="alert" aria-live="assertive" className="text-red-600 mb-2">
           {feedback}
         </p>
       )}

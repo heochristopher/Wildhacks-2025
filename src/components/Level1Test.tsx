@@ -150,7 +150,7 @@ export default function Level1Test() {
         </h3>
       
         {/* Display current letter with live region */}
-        <div className="text-4xl font-bold mb-6" aria-live="polite">
+        <div tabIndex={0} className="text-4xl font-bold mb-6" aria-live="polite">
           {currentLetter}
         </div>
 

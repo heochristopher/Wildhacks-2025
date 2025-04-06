@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
 
@@ -15,9 +15,10 @@ export default function Level2Test() {
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // 0 or 1
 
-  // Fetch questions on mount
-  // Fetch progress and content
-  
+  // Create a ref for the input to auto-focus it.
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch progress and content on mount.
   useEffect(() => {
     const fetchProgressAndContent = async () => {
       try {
@@ -27,7 +28,6 @@ export default function Level2Test() {
         const data = await res.json();
         const levelData = data.progress?.level2?.test;
         const difficulty = levelData?.difficulty ?? "easy";
-
         setCurrentDifficulty(difficulty);
 
         const contentRes = await fetch(
@@ -45,7 +45,43 @@ export default function Level2Test() {
     fetchProgressAndContent();
   }, []);
 
-  // Compute current word
+  // Auto-focus the input field when the question number changes.
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [questionNumber]);
+
+  const handleAnswer = () => {
+    const currentWord = questions[questionNumber - 1] || t("loadingFallback");
+    const trimmedAnswer = userAnswer.trim().toLowerCase();
+    const expectedAnswer = currentWord.trim().toLowerCase();
+
+    if (trimmedAnswer === expectedAnswer) {
+      setCorrectCount((prev) => prev + 1);
+      setFeedback(t("feedbackCorrect"));
+      nextQuestion();
+    } else if (attempts === 0) {
+      setFeedback(t("feedbackIncorrectOne"));
+      setAttempts(1);
+      setUserAnswer("");
+    } else {
+      setFeedback(t("feedbackIncorrectTwo"));
+      nextQuestion();
+    }
+  };
+
+  const nextQuestion = () => {
+    setUserAnswer("");
+    setAttempts(0);
+    if (questionNumber >= 10) {
+      setIsFinished(true);
+      submitProgress(correctCount);
+    } else {
+      setQuestionNumber((prev) => prev + 1);
+    }
+  };
+
   const submitProgress = async (score: number) => {
     try {
       const percent = (score + 1) / 10;
@@ -61,21 +97,7 @@ export default function Level2Test() {
 
       await fetch("http://localhost:8000/submitTest", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          level: 2,
-          score: percent.toFixed(2),
-          difficulty: newDifficulty,
-        }),
-      });
-      await fetch("http://localhost:8000/submitTest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           level: 2,
@@ -87,117 +109,77 @@ export default function Level2Test() {
       console.error("Error submitting progress:", err);
     }
   };
-  
 
-
-    // When currentWord changes, speak it using the Speech Synthesis API
-    // useEffect(() => {
-    //   if (!isLoading && questions.length > 0) {
-    //     window.speechSynthesis.cancel(); // Cancel any ongoing speech
-    //     const utterance = new SpeechSynthesisUtterance(currentWord);
-    //     utterance.lang = "en-US"; // Adjust the language if needed
-    //     window.speechSynthesis.speak(utterance);
-    //   }
-    // }, [currentWord, isLoading, questions]);
-
-    const handleAnswer = () => {
-      const currentWord = questions[questionNumber - 1] || t("loadingFallback");
-      const trimmedAnswer = userAnswer.trim().toLowerCase();
-      const expectedAnswer = currentWord.trim().toLowerCase();
-
-      if (trimmedAnswer === expectedAnswer) {
-        setCorrectCount((prev) => prev + 1);
-        setFeedback(t("feedbackCorrect"));
-        nextQuestion();
-      } else if (attempts === 0) {
-        setFeedback(t("feedbackIncorrectOne"));
-        setAttempts(1);
-        setUserAnswer("");
-      } else {
-        setFeedback(t("feedbackIncorrectTwo"));
-        nextQuestion();
-      }
-    };
-
-    const nextQuestion = () => {
-      setUserAnswer("");
-      setAttempts(0);
-      if (questionNumber >= 10) {
-        setIsFinished(true);
-        submitProgress(correctCount);
-      } else {
-        setQuestionNumber((prev) => prev + 1);
-      }
-    };
-
-    if (isLoading) {
-      return (
-        <div className="p-10 font-mono">
-          {t("loading")}
-        </div>
-      );
-    }
-
-    if (isFinished) {
-      return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
-    }
-    const currentWord = questions[questionNumber - 1] || t("loadingFallback");
-  
+  if (isLoading) {
     return (
-      <main
-        role="main"
-        className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
-      >
-        {/* Question Count */}
-        <h2 id="questionCount" className="text-xl mb-4">
-          {t("questionCount", { current: questionNumber, total: 10 })}
-        </h2>
-
-        {/* Instructions */}
-        <h3 id="instruction" className="mb-2">
-          {t("instruction")}
-        </h3>
-
-        {/* Display current word with live region */}
-        <div className="text-2xl mb-6 font-semibold" aria-live="polite">
-          {currentWord}
-        </div>
-
-        {/* Hidden label for screen readers */}
-        <label htmlFor="userAnswer" className="sr-only">
-          {t("inputLabel")}
-        </label>
-        <input
-          id="userAnswer"
-          type="text"
-          value={userAnswer}
-          onChange={(e) => setUserAnswer(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleAnswer();
-            }
-          }}
-          className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
-          placeholder={t("inputPlaceholder")}
-          maxLength={50}
-          aria-labelledby="instruction questionCount"
-        />
-
-        {/* Feedback message announced via role="alert" */}
-        {feedback && (
-          <p role="alert" className="text-red-600 mb-2">
-            {feedback}
-          </p>
-        )}
-
-        {/* Submit Button */}
-        <button
-          onClick={handleAnswer}
-          className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
-          aria-label={t("submitAriaLabel")}
-        >
-          {t("submit")}
-        </button>
-      </main>
+      <div className="p-10 font-mono">
+        {t("loading")}
+      </div>
     );
+  }
+
+  if (isFinished) {
+    return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
+  }
+
+  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
+
+  return (
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
+      {/* Question count */}
+      <h2 id="questionCount" className="text-xl mb-4">
+        {t("questionCount", { current: questionNumber, total: 10 })}
+      </h2>
+
+      {/* Instructions */}
+      <h3 id="instruction" className="mb-2">
+        {t("instruction")}
+      </h3>
+
+      {/* Display current word with live region */}
+      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+        {currentWord}
+      </div>
+
+      {/* Hidden label for input */}
+      <label htmlFor="userAnswer" className="sr-only">
+        {t("inputLabel")}
+      </label>
+      <input
+        id="userAnswer"
+        ref={inputRef}
+        type="text"
+        value={userAnswer}
+        onChange={(e) => setUserAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnswer();
+          }
+        }}
+        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
+        placeholder={t("inputPlaceholder")}
+        maxLength={50}
+        aria-labelledby="instruction questionCount"
+      />
+
+      {/* Feedback message announced via role="alert" */}
+      {feedback && (
+        <p role="alert" className="text-red-600 mb-2">
+          {feedback}
+        </p>
+      )}
+
+      {/* Submit Button */}
+      <button
+        onClick={handleAnswer}
+        className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
+        aria-label={t("submitAriaLabel")}
+      >
+        {t("submit")}
+      </button>
+    </main>
+  );
 }

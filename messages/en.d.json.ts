@@ -43,7 +43,10 @@ declare const messages: {
     "signinImageAlt": "Illustrative image for sign in page"
   },
   "levelsDashboard": {
-    "pageTitle": "Choose a Braille Level",
+    "welcomeMessage": "Welcome to Your Dashboard!",
+    "dashboardInstructions": "Click on any level to start learning or testing your skills.",
+    "loading": "Loading progress...",
+    "levelGroup": "Level {group}",
     "level1LearningTitle": "Level 1: Learning",
     "level1LearningDescription": "Learn the braille representation of each letter.",
     "level1TestTitle": "Level 1: Test",
@@ -55,7 +58,10 @@ declare const messages: {
     "level3ReadingTitle": "Level 3: Reading",
     "level3ReadingDescription": "Learn how to read braille sentences.",
     "level3WritingTitle": "Level 3: Writing",
-    "level3WritingDescription": "Learn how to write sentences with braille."
+    "level3WritingDescription": "Learn how to write sentences with braille.",
+    "lastCompleted": "Last Completed: {completed}/{total}",
+    "scoreLabel": "Score: {score}",
+    "difficultyLabel": "Difficulty: {difficulty}"
   },
   "levelPage": {
     "level1LearningTitle": "Level 1: Learning",
@@ -71,6 +77,7 @@ declare const messages: {
     "level3WritingTitle": "Level 3: Writing",
     "level3WritingDescription": "Learn how to write sentences with braille."
   },
+
   "levelOverview": {
     "start": "Start",
     "startAriaLabel": "Start level"
@@ -81,7 +88,7 @@ declare const messages: {
     "instruction": "Read the letter and then type it back:",
     "inputLabel": "Type the letter shown above",
     "inputPlaceholder": "Type the letter",
-    "feedbackIncorrect": "❌ Incorrect. Try again!",
+    "feedbackIncorrect": "Incorrect. Try again!",
     "submit": "Submit",
     "submitAriaLabel": "Submit your answer"
   },
@@ -92,9 +99,9 @@ declare const messages: {
     "instruction": "Read the letter and then type it back:",
     "inputLabel": "Type the letter shown above",
     "inputPlaceholder": "Type the letter",
-    "feedbackCorrect": "✅ Correct!",
-    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
-    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "feedbackCorrect": "Correct!",
+    "feedbackIncorrectOne": "Incorrect. One more try!",
+    "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit",
     "submitAriaLabel": "Submit your answer"
   },
@@ -105,7 +112,7 @@ declare const messages: {
     "instruction": "Please read and then spell this word:",
     "inputLabel": "Type your answer here",
     "inputPlaceholder": "Type your answer here",
-    "feedbackIncorrect": "❌ Incorrect. Try again!",
+    "feedbackIncorrect": "Incorrect. Try again!",
     "submit": "Submit Answer",
     "submitAriaLabel": "Submit your answer"
   },
@@ -116,22 +123,26 @@ declare const messages: {
     "instruction": "Please read and then spell this word:",
     "inputLabel": "Type your answer here",
     "inputPlaceholder": "Type your answer here",
-    "feedbackCorrect": "✅ Correct!",
-    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
-    "feedbackIncorrectTwo": "❌ Incorrect again.",
-    "submit": "Submit Answer",
-    "submitAriaLabel": "Submit your answer"
-  },
-  "level3Reading": {
-    "loading": "Loading reading activity...",
-    "questionCount": "Reading {current} of {total}",
-    "inputLabel": "Type your answer here",
-    "inputPlaceholder": "Type your answer",
     "feedbackCorrect": "Correct!",
     "feedbackIncorrectOne": "Incorrect. One more try!",
     "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit Answer",
     "submitAriaLabel": "Submit your answer"
+  },
+  "level3Reading": {
+    "errorFetch": "Error fetching reading activity",
+    "loading": "Loading reading activity...",
+    "questionCount": "Reading {current} of {total}",
+    "instruction": "Please read the sentence and answer the question:",
+    "inputLabel": "Type your answer here",
+    "inputPlaceholder": "Type your answer here",
+    "submitAriaLabel": "Submit your answer",
+    "submit": "Submit Answer",
+    "feedbackCorrect": "Correct!",
+    "feedbackIncorrectOne": "Incorrect. One more try!",
+    "feedbackIncorrectTwo": "Incorrect again.",
+    "lang": "en-US",
+    "rate": "0.75"
   },
   "level3Writing": {
     "loading": "Loading sentences...",

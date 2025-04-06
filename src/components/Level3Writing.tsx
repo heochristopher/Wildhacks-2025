@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
 
@@ -15,11 +15,14 @@ export default function Level3Writing() {
   const [isFinished, setIsFinished] = useState(false);
   const [currentDifficulty, setCurrentDifficulty] = useState("easy");
 
+  // Create a ref for the input to set focus automatically.
+  const inputRef = useRef<HTMLInputElement>(null);
+
   // Fetch sentences on mount.
   useEffect(() => {
     const fetchSentences = async () => {
       try {
-        // Get difficulty from dashboard
+        // Get difficulty from dashboard.
         const res = await fetch("http://localhost:8000/dashboard", {
           credentials: "include",
         });
@@ -27,12 +30,12 @@ export default function Level3Writing() {
         const difficulty = data.progress?.level3?.reading?.difficulty ?? "easy";
         setCurrentDifficulty(difficulty);
 
-        // Get content using difficulty
+        // Get content using difficulty.
         const contentRes = await fetch(
           `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=English`
         );
         const contentData = await contentRes.json();
-        setSentences(contentData.content.slice(0, 3)); // Limit to 3
+        setSentences(contentData.content.slice(0, 3)); // Limit to 3 sentences.
       } catch (err) {
         console.error(t("errorFetch"), err);
       } finally {
@@ -50,11 +53,18 @@ export default function Level3Writing() {
     if (currentSentence) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentSentence);
-      utterance.lang = t('lang');
-      utterance.rate = Number(t('rate'));
+      utterance.lang = t("lang");
+      utterance.rate = Number(t("rate"));
       window.speechSynthesis.speak(utterance);
     }
-  }, [currentSentence]);
+  }, [currentSentence, t]);
+
+  // Auto-focus the input when question changes.
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [questionIndex]);
 
   const handleAnswer = () => {
     const user = userAnswer.trim().toLowerCase();
@@ -64,8 +74,8 @@ export default function Level3Writing() {
       setCorrectCount((prev) => prev + 1);
       setFeedback(t("feedbackCorrect"));
       const utterance = new SpeechSynthesisUtterance(t("feedbackCorrect"));
-      utterance.lang = t('lang');
-      utterance.rate = Number(t('rate'));
+      utterance.lang = t("lang");
+      utterance.rate = Number(t("rate"));
       utterance.onend = () => {
         setTimeout(() => {
           nextQuestion();
@@ -75,16 +85,16 @@ export default function Level3Writing() {
     } else if (attempts === 0) {
       setFeedback(t("feedbackIncorrectOne"));
       const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectOne"));
-      utterance.lang = t('lang');
-      utterance.rate = Number(t('rate'));
+      utterance.lang = t("lang");
+      utterance.rate = Number(t("rate"));
       window.speechSynthesis.speak(utterance);
       setAttempts(1);
       setUserAnswer("");
     } else {
       setFeedback(t("feedbackIncorrectTwo"));
       const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectTwo"));
-      utterance.lang = t('lang');
-      utterance.rate = Number(t('rate'));
+      utterance.lang = t("lang");
+      utterance.rate = Number(t("rate"));
       utterance.onend = () => {
         setTimeout(() => {
           nextQuestion();
@@ -148,10 +158,14 @@ export default function Level3Writing() {
   }
 
   return (
-    <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Sentence {t("questionCount", { current: questionIndex + 1, total: 3 })} of {sentences.length}</h2>
-      <h3 className="mb-2">Read and type this sentence exactly:</h3>
-      <div className="text-lg font-semibold mb-6">"{currentSentence}"</div>
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
+      {/* Question count */}
+      <h2 id="questionCount" className="text-xl mb-4">
+        {t("questionCount", { current: questionIndex + 1, total: sentences.length })}
+      </h2>
 
       {/* Instructions */}
       <h3 id="instruction" className="mb-2">
@@ -159,7 +173,7 @@ export default function Level3Writing() {
       </h3>
 
       {/* Display current sentence */}
-      <div className="text-lg font-semibold mb-6">
+      <div tabIndex={0} className="text-lg font-semibold mb-6">
         "{currentSentence}"
       </div>
 
@@ -169,12 +183,23 @@ export default function Level3Writing() {
       </label>
       <input
         id="userAnswer"
+        ref={inputRef}
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleAnswer();
+          }
+        }}
+        onFocus={() => {
+          // When input is focused, read the current sentence aloud.
+          if (currentSentence) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(currentSentence);
+            utterance.lang = t("lang");
+            utterance.rate = Number(t("rate"));
+            window.speechSynthesis.speak(utterance);
           }
         }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-96 text-black"
@@ -185,7 +210,7 @@ export default function Level3Writing() {
 
       {/* Feedback message announced via role="alert" */}
       {feedback && (
-        <p role="alert" className="text-red-600 mb-2">
+        <p role="alert" aria-live="assertive" className="text-red-600 mb-2">
           {feedback}
         </p>
       )}
@@ -198,6 +223,6 @@ export default function Level3Writing() {
       >
         {t("submit")}
       </button>
-    </div>
+    </main>
   );
 }

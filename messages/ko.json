@@ -16,16 +16,16 @@
     "description": "오류가 발생했습니다. 다시 시도하세요."
   },
   "homepage": {
-    "description": "자신의 속도에 맞춰 학습하고 촉각 능력을 향상시키는 인터랙티브 점자 학습을 경험해 보세요.",
+    "description": "자신의 속도에 맞춰 학습하고 촉각 능력을 향상시키는 인터랙티브 점자 학습을 경험하세요.",
     "getStarted": "시작하기",
     "skipToContent": "주요 내용으로 건너뛰기",
     "backgroundAriaLabel": "점자 학습 환경을 보여주는 장식 배경",
-    "getStartedAriaLabel": "점자 학습을 시작하세요",
+    "getStartedAriaLabel": "점자 학습을 시작하기",
     "logoAlt": "DotByDot - 인터랙티브 점자 학습 플랫폼"
   },
   "footer": {
     "footerHeading": "푸터",
-    "createdBy": "제작: 허남윤, 김하요, 정태인, 수이린",
+    "createdBy": "제작: Chris Heo, Hajo Wolfram, Anthony Chung, Elaine Cui",
     "gitHub": "GitHub",
     "languageSelectAriaLabel": "언어 선택"
   },
@@ -37,10 +37,13 @@
     "passwordLabel": "비밀번호",
     "signInButton": "로그인",
     "signInButtonAria": "로그인 폼 제출",
-    "signinImageAlt": "로그인 페이지를 위한 이미지"
+    "signinImageAlt": "로그인 페이지용 이미지"
   },
   "levelsDashboard": {
-    "pageTitle": "점자 레벨 선택",
+    "welcomeMessage": "대시보드에 오신 것을 환영합니다!",
+    "dashboardInstructions": "학습 또는 테스트할 레벨을 클릭하세요.",
+    "loading": "진행 상황 불러오는 중...",
+    "levelGroup": "레벨 {group}",
     "level1LearningTitle": "레벨 1: 학습",
     "level1LearningDescription": "각 글자의 점자 표현을 배우세요.",
     "level1TestTitle": "레벨 1: 테스트",
@@ -52,7 +55,10 @@
     "level3ReadingTitle": "레벨 3: 읽기",
     "level3ReadingDescription": "점자 문장을 읽는 방법을 배우세요.",
     "level3WritingTitle": "레벨 3: 쓰기",
-    "level3WritingDescription": "점자로 문장을 쓰는 방법을 배우세요."
+    "level3WritingDescription": "점자로 문장을 쓰는 방법을 배우세요.",
+    "lastCompleted": "마지막 완료: {completed}/{total}",
+    "scoreLabel": "점수: {score}",
+    "difficultyLabel": "난이도: {difficulty}"
   },
   "levelPage": {
     "level1LearningTitle": "레벨 1: 학습",
@@ -73,25 +79,25 @@
     "startAriaLabel": "레벨 시작"
   },
   "level1Learning": {
-    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ",
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "letterCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
     "inputLabel": "위에 표시된 글자를 입력하세요",
     "inputPlaceholder": "글자를 입력하세요",
-    "feedbackIncorrect": "❌ 틀렸습니다. 다시 시도하세요!",
+    "feedbackIncorrect": "틀렸습니다. 다시 시도하세요!",
     "submit": "제출",
     "submitAriaLabel": "답변 제출"
   },
   "level1Test": {
-    "letters": "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ",
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "loadingTest": "테스트 준비 중...",
     "questionCount": "전체 {total}개 중 {current}번째 글자",
     "instruction": "글자를 읽고 입력하세요:",
     "inputLabel": "위에 표시된 글자를 입력하세요",
     "inputPlaceholder": "글자를 입력하세요",
-    "feedbackCorrect": "✅ 정답입니다!",
-    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
-    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
+    "feedbackCorrect": "정답입니다!",
+    "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "submit": "제출",
     "submitAriaLabel": "답변 제출"
   },
@@ -102,7 +108,7 @@
     "instruction": "단어를 읽고 철자를 입력하세요:",
     "inputLabel": "여기에 답을 입력하세요",
     "inputPlaceholder": "답을 입력하세요",
-    "feedbackIncorrect": "❌ 틀렸습니다. 다시 시도하세요!",
+    "feedbackIncorrect": "틀렸습니다. 다시 시도하세요!",
     "submit": "답 제출",
     "submitAriaLabel": "답변 제출"
   },
@@ -113,22 +119,26 @@
     "instruction": "단어를 읽고 철자를 입력하세요:",
     "inputLabel": "여기에 답을 입력하세요",
     "inputPlaceholder": "답을 입력하세요",
-    "feedbackCorrect": "✅ 정답입니다!",
-    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
-    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
-    "submit": "답 제출",
-    "submitAriaLabel": "답변 제출"
-  },
-  "level3Reading": {
-    "loading": "읽기 활동을 불러오는 중...",
-    "questionCount": "전체 {total}개 중 {current}번째 읽기",
-    "inputLabel": "여기에 답을 입력하세요",
-    "inputPlaceholder": "답을 입력하세요",
     "feedbackCorrect": "정답입니다!",
     "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
     "feedbackIncorrectTwo": "다시 틀렸습니다.",
     "submit": "답 제출",
     "submitAriaLabel": "답변 제출"
+  },
+  "level3Reading": {
+    "errorFetch": "읽기 활동을 불러오는 중 오류가 발생했습니다",
+    "loading": "읽기 활동을 불러오는 중...",
+    "questionCount": "전체 {total}개 중 {current}번째 읽기",
+    "instruction": "문장을 읽고 질문에 답하세요:",
+    "inputLabel": "여기에 답을 입력하세요",
+    "inputPlaceholder": "답을 입력하세요",
+    "submitAriaLabel": "답변 제출",
+    "submit": "답 제출",
+    "feedbackCorrect": "정답입니다!",
+    "feedbackIncorrectOne": "틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "다시 틀렸습니다.",
+    "lang": "ko-KR",
+    "rate": "1.25"
   },
   "level3Writing": {
     "loading": "문장을 불러오는 중...",
