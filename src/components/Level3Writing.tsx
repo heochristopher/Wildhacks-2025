@@ -40,8 +40,8 @@ export default function Level3Writing() {
     if (currentSentence) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentSentence);
-      utterance.lang = "en-US";
-      utterance.rate = 0.75; // Adjust rate as needed.
+      utterance.lang = t('lang');
+      utterance.rate = Number(t('rate'));
       window.speechSynthesis.speak(utterance);
     }
   }, [currentSentence]);
@@ -52,30 +52,33 @@ export default function Level3Writing() {
 
     if (user === expected) {
       setCorrectCount((prev) => prev + 1);
-      setFeedback("✅ Correct!");
-      const utterance = new SpeechSynthesisUtterance("Correct!");
-      utterance.lang = "en-US";
-      utterance.rate = 0.75;
+      setFeedback(t("feedbackCorrect"));
+      const utterance = new SpeechSynthesisUtterance(t("feedbackCorrect"));
+      utterance.lang = t('lang');
+      utterance.rate = Number(t('rate'));
       utterance.onend = () => {
-        setTimeout(() => {nextQuestion();}, 1000)
+        setTimeout(() => {
+          nextQuestion();
+        }, 1000);
       };
       window.speechSynthesis.speak(utterance);
     } else if (attempts === 0) {
-      setFeedback("❌ Incorrect. One more try!");
-      const utterance = new SpeechSynthesisUtterance("Incorrect. One more try!");
+      setFeedback(t("feedbackIncorrectOne"));
+      const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectOne"));
       utterance.lang = "en-US";
       utterance.rate = 0.75;
       window.speechSynthesis.speak(utterance);
       setAttempts(1);
       setUserAnswer("");
     } else {
-      setFeedback("❌ Incorrect again.");
-      const utterance = new SpeechSynthesisUtterance("Incorrect. Next question!");
+      setFeedback(t("feedbackIncorrectTwo"));
+      const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectTwo"));
       utterance.lang = "en-US";
       utterance.rate = 0.75;
-      // Wait until the utterance finishes before moving on.
       utterance.onend = () => {
-        setTimeout(() => {nextQuestion();}, 1000)
+        setTimeout(() => {
+          nextQuestion();
+        }, 1000);
       };
       window.speechSynthesis.speak(utterance);
     }
@@ -106,17 +109,20 @@ export default function Level3Writing() {
   }
 
   return (
-    <main role="main" className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
       {/* Question count */}
       <h2 id="questionCount" className="text-xl mb-4">
         {t("questionCount", { current: questionIndex + 1, total: 3 })}
       </h2>
-      
+
       {/* Instructions */}
       <h3 id="instruction" className="mb-2">
         {t("instruction")}
       </h3>
-      
+
       {/* Display current sentence */}
       <div className="text-lg font-semibold mb-6">
         "{currentSentence}"
