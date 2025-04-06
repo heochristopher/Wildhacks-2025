@@ -1,49 +1,40 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import EndOfTest from "./EndOfTest";
+import { useSearchParams } from "next/navigation";
 
-export default function Level2Test() {
-  const [currentDifficulty, setCurrentDifficulty] = useState("easy");
-  const [questionNumber, setQuestionNumber] = useState(1);
-  const [isFinished, setIsFinished] = useState(false);
-  const [questions, setQuestions] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+function shuffle<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+export default function Level1Test() {
+  const searchParams = useSearchParams();
+  const currentDifficulty = searchParams.get("difficulty") ?? "easy";
+
+  const [shuffledAlphabet, setShuffledAlphabet] = useState<string[]>([]);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [isFinished, setIsFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [attempts, setAttempts] = useState(0); // 0 or 1
+  const [attempts, setAttempts] = useState(0);
 
-  // Fetch user progress & difficulty
   useEffect(() => {
-    const fetchProgressAndQuestions = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/dashboard", {
-          credentials: "include",
-        });
-        const data = await res.json();
-
-        const levelData = data.progress?.level2?.test;
-        const difficulty = levelData?.difficulty ?? "easy";
-        setCurrentDifficulty(difficulty);
-
-        const contentRes = await fetch(
-          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
-        );
-        const contentData = await contentRes.json();
-        setQuestions(contentData.content.slice(0, 10)); // Limit to 10
-      } catch (err) {
-        console.error("Error fetching progress/content:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProgressAndQuestions();
+    setShuffledAlphabet(shuffle(alphabet));
   }, []);
+
+  const currentLetter = shuffledAlphabet[questionIndex];
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score + 1) / 10;
+      const percent = score / shuffledAlphabet.length;
       let newDifficulty = currentDifficulty;
 
       if (percent < 0.5) {
@@ -61,21 +52,20 @@ export default function Level2Test() {
         },
         credentials: "include",
         body: JSON.stringify({
-          level: 2,
-          score: percent.toFixed(2),
+          level: 1,
+          score: percent.toFixed(2).toString(),
           difficulty: newDifficulty,
         }),
       });
     } catch (err) {
-      console.error("Error submitting test progress:", err);
+      console.error("Error submitting test:", err);
     }
   };
 
   const handleAnswer = () => {
-    const currentWord = questions[questionNumber - 1]?.trim().toLowerCase();
-    const answer = userAnswer.trim().toLowerCase();
+    const trimmed = userAnswer.trim().toUpperCase();
 
-    if (answer === currentWord) {
+    if (trimmed === currentLetter) {
       setCorrectCount((prev) => prev + 1);
       setFeedback("✅ Correct!");
       nextQuestion();
@@ -86,42 +76,45 @@ export default function Level2Test() {
     } else {
       setFeedback("❌ Incorrect again.");
       nextQuestion();
+      setUserAnswer("");
     }
   };
 
   const nextQuestion = () => {
     setUserAnswer("");
     setAttempts(0);
-    if (questionNumber >= 10) {
+
+    if (questionIndex === shuffledAlphabet.length - 1) {
       setIsFinished(true);
-      submitProgress(correctCount); // Send score before end screen
+      submitProgress(correctCount + 1);
     } else {
-      setQuestionNumber((prev) => prev + 1);
+      setQuestionIndex((prev) => prev + 1);
     }
   };
 
-  if (isLoading) {
-    return <div className="p-10 font-mono">Loading questions...</div>;
+  if (shuffledAlphabet.length === 0) {
+    return <div className="p-10 font-mono">Preparing test...</div>;
   }
 
   if (isFinished) {
-    return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
+    return (
+      <EndOfTest score={{ correct: correctCount, total: shuffledAlphabet.length }} />
+    );
   }
-
-  const currentWord = questions[questionNumber - 1] || "Loading...";
 
   return (
     <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Question {questionNumber} of 10</h2>
-      <h3 className="mb-2">Please read and then spell this word:</h3>
-      <div className="text-2xl mb-6 font-semibold">{currentWord}</div>
+      <h2 className="text-xl mb-4">Letter {questionIndex + 1} of 26</h2>
+      <h3 className="mb-2">Read the letter and then type it back:</h3>
+      <div className="text-4xl font-bold mb-6">{currentLetter}</div>
 
       <input
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
-        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
-        placeholder="Type your answer here"
+        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
+        placeholder="Type the letter"
+        maxLength={1}
       />
 
       {feedback && <p className="text-red-600 mb-2">{feedback}</p>}
@@ -130,7 +123,7 @@ export default function Level2Test() {
         onClick={handleAnswer}
         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
       >
-        Submit Answer
+        Submit
       </button>
     </div>
   );

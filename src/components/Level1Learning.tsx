@@ -75,7 +75,7 @@ export default function Level1Test() {
     if (userAnswer.trim().toUpperCase() === alphabet[questionIndex]) {
       setFeedback("");
       setUserAnswer("");
-
+4
       if (questionIndex === alphabet.length - 1) {
         submitProgress(questionIndex); // Submit once on final question
         setIsFinished(true);
