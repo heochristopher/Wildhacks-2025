@@ -10,12 +10,70 @@ export default function Level1Learning() {
   const alphabet = t("letters").split("");
 
 
-  const [questionIndex, setQuestionIndex] = useState(0);
+export default function Level1Test() {
+  const [questionIndex, setQuestionIndex] = useState<number | null>(null);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isFinished, setIsFinished] = useState(false);
 
-  const currentLetter = alphabet[questionIndex];
+  const currentLetter =
+    questionIndex !== null ? alphabet[questionIndex] : undefined;
+
+  // Fetch progress on mount
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/dashboard", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        const userProgress = data.progress?.level1?.learning?.lastCompleted ?? 0;
+        if (userProgress < 0 || userProgress >= alphabet.length) {
+          setQuestionIndex(0); // fallback
+          return;
+        }
+        setQuestionIndex(userProgress);
+      } catch (err) {
+        console.error("Failed to load user progress:", err);
+        setQuestionIndex(0); // fallback
+      }
+    };
+
+    fetchProgress();
+  }, []);
+
+  const submitProgress = async (index: number) => {
+    try {
+      await fetch("http://localhost:8000/updateScore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 1,
+          score: "-1",
+          lastCompleted: index,
+        }),
+      });
+    } catch (err) {
+      console.error("Error updating score:", err);
+    }
+  };
+
+  // Only submit on page unload
+  useEffect(() => {
+    if (questionIndex === null) return;
+
+    const handleBeforeUnload = () => {
+      submitProgress(questionIndex);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [questionIndex]);
 
     useEffect(() => {
     window.speechSynthesis.cancel(); // cancel any ongoing speech
@@ -35,17 +93,22 @@ export default function Level1Learning() {
     if (actualInput === expectedLetter) {
       setFeedback("");
       setUserAnswer("");
-
+4
       if (questionIndex === alphabet.length - 1) {
+        submitProgress(questionIndex); // Submit once on final question
         setIsFinished(true);
       } else {
-        setQuestionIndex((prev) => prev + 1);
+        setQuestionIndex((prev) => (prev !== null ? prev + 1 : 0));
       }
     } else {
       setFeedback(t("feedbackIncorrect"));
       setUserAnswer("");
     }
   };
+
+  if (questionIndex === null) {
+    return <div className="p-10 font-mono">Loading your progress...</div>;
+  }
 
   if (isFinished) return <EndOfLevel />;
 

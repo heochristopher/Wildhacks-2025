@@ -18,26 +18,39 @@ export default function Level3Reading() {
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [currentDifficulty, setCurrentDifficulty] = useState("easy");
 
   // Fetch sentence pairs and their associated questions on mount.
+  // Fetch progress & sentences/questions
   useEffect(() => {
-    const fetchSentencesAndQuestions = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8000/generateContent/3");
+        const res = await fetch("http://localhost:8000/dashboard", {
+          credentials: "include",
+        });
         const data = await res.json();
-        const sentenceArray: string[] = data.content;
-        // Fetch questions concurrently for each sentence.
-        const questionPairs: SentencePair[] = await Promise.all(
-          sentenceArray.map(async (sentence) => {
-            const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ sentence }),
-            });
-            const q = await res.json();
-            return { sentence, question: q.question };
-          })
+        const levelData = data.progress?.level3?.reading;
+        const difficulty = levelData?.difficulty ?? "easy";
+        setCurrentDifficulty(difficulty);
+
+        const contentRes = await fetch(
+          `http://localhost:8000/generateContent/3?difficulty=${difficulty}&language=English`
         );
+        const contentData = await contentRes.json();
+
+        const sentenceArray: string[] = contentData.content;
+        const questionPairs: SentencePair[] = [];
+
+        for (const sentence of sentenceArray) {
+          const res = await fetch("http://localhost:8000/generateContent/generateQuestion", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sentence }),
+          });
+          const q = await res.json();
+          questionPairs.push({ sentence, question: q.question });
+        }
+
         setSentencePairs(questionPairs);
       } catch (err) {
         console.error(t("errorFetch"), err);
@@ -46,10 +59,36 @@ export default function Level3Reading() {
       }
     };
 
-    fetchSentencesAndQuestions();
-  }, [t]);
+    fetchData();
+  }, []);
 
-  const currentPair = sentencePairs[questionIndex];
+  const submitProgress = async (score: number) => {
+    try {
+      const percent = (score + 1) / sentencePairs.length;
+      let newDifficulty = currentDifficulty;
+
+      if (percent < 0.5) {
+        if (currentDifficulty === "medium") newDifficulty = "easy";
+        else if (currentDifficulty === "hard") newDifficulty = "medium";
+      } else if (percent > 0.8) {
+        if (currentDifficulty === "easy") newDifficulty = "medium";
+        else if (currentDifficulty === "medium") newDifficulty = "hard";
+      }
+
+      await fetch("http://localhost:8000/submitTest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 3,
+          score: percent.toFixed(2).toString(),
+          difficulty: newDifficulty,
+        }),
+      });
+    } catch (err) {
+      console.error("Error submitting reading progress:", err);
+    }
+  };
 
   // Use Speech Synthesis to speak the current sentence and question.
   useEffect(() => {
@@ -71,6 +110,7 @@ export default function Level3Reading() {
   }, [currentPair, loading]);
 
   const handleSubmit = async () => {
+    const currentPair = sentencePairs[questionIndex];
     if (!currentPair) return;
     const res = await fetch("http://localhost:8000/generateContent/checkAnswer", {
       method: "POST",
@@ -104,6 +144,7 @@ export default function Level3Reading() {
     setFeedback("");
     if (questionIndex >= sentencePairs.length - 1) {
       setIsFinished(true);
+      submitProgress(correctCount);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
@@ -120,6 +161,8 @@ export default function Level3Reading() {
     return (
       <EndOfTest score={{ correct: correctCount, total: sentencePairs.length }} />
     );
+
+  const currentPair = sentencePairs[questionIndex];
 
   return (
     <main

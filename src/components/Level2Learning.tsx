@@ -7,26 +7,40 @@ export default function Level2Learning() {
   const t = useTranslations("level2Learning");
   const [questionNumber, setQuestionNumber] = useState(1);
   const [isFinished, setIsFinished] = useState(false);
+  const [currentDifficulty, setCurrentDifficulty] = useState("easy");
   const [questions, setQuestions] = useState<string[]>([]);
+  const [questionNumber, setQuestionNumber] = useState<number | null>(null); // index-based
+  const [isFinished, setIsFinished] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
 
+  // Load progress & questions
   useEffect(() => {
-    async function fetchAndSpeak() {
-      // Fetch questions only if still loading.
-      if (isLoading) {
-        try {
-          const res = await fetch(
-            "http://localhost:8000/generateContent/2?difficulty=easy&language=English"
-          );
-          const data = await res.json();
-          setQuestions(data.content); // assuming data.content is an array of words
-        } catch (err) {
-          console.error("Error fetching content:", err);
-        } finally {
-          setIsLoading(false);
-        }
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/dashboard", {
+          credentials: "include",
+        });
+        const data = await res.json();
+
+        const progressData = data.progress?.level2?.learning ?? {};
+        const difficulty = data.progress?.level2?.test.difficulty ?? "easy";
+        const lastCompleted = progressData.lastCompleted ?? 0;
+
+        setCurrentDifficulty(difficulty);
+        setQuestionNumber(lastCompleted); // will be the index of the next question
+
+        const contentRes = await fetch(
+          `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
+        );
+        const contentData = await contentRes.json();
+        setQuestions(contentData.content.slice(0, 10)); // limit to 10 words
+      } catch (err) {
+        console.error("Error loading dashboard or content", err);
+        setQuestionNumber(0); // fallback
+      } finally {
+        setIsLoading(false);
       }
       // Once questions are loaded, speak the current word.
       if (!isLoading && questions.length > 0) {
@@ -41,22 +55,62 @@ export default function Level2Learning() {
         }
       }
     }
-    fetchAndSpeak();
-  }, [isLoading, questions, questionNumber]);
 
+
+    fetchData();
+  }, []);
+
+  // Submit progress to FastAPI
+  const submitProgress = async (index: number) => {
+    try {
+      await fetch("http://localhost:8000/updateScore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 2,
+          score: "-1",
+          lastCompleted: index,
+          questions: questions.slice(index)
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+    }
+  };
+
+  // Save on unload
+  useEffect(() => {
+    if (questionNumber === null) return;
+
+    const handleUnload = () => {
+      submitProgress(questionNumber);
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      submitProgress(questionNumber);
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [questionNumber]);
 
   const handleAnswer = () => {
-    const currentWord = questions[questionNumber - 1]?.trim().toLowerCase();
+    const currentWord = questions[questionNumber!]?.trim().toLowerCase();
     const answer = userAnswer.trim().toLowerCase();
 
     if (answer === currentWord) {
       setFeedback("");
       setUserAnswer("");
 
-      if (questionNumber >= 10) {
+      const nextIndex = questionNumber! + 1;
+
+      if (nextIndex >= questions.length) {
+        submitProgress(nextIndex);
         setIsFinished(true);
       } else {
-        setQuestionNumber((prev) => prev + 1);
+        setQuestionNumber(nextIndex);
       }
     } else {
       setFeedback(t("feedbackIncorrect"));
@@ -64,7 +118,7 @@ export default function Level2Learning() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || questionNumber === null || !questions.length) {
     return (
       <div className="p-10 font-mono">
         {t("loading")}
@@ -72,9 +126,7 @@ export default function Level2Learning() {
     );
   }
 
-  if (isFinished) {
-    return <EndOfLevel />;
-  }
+  if (isFinished) return <EndOfLevel />;
 
   const currentWord = questions[questionNumber - 1] || t("loadingFallback");
 

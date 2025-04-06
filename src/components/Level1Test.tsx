@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
+import { useSearchParams } from "next/navigation";
 
 
 function shuffle<T>(array: T[]): T[] {
@@ -17,6 +18,8 @@ export default function Level1Test() {
   const t = useTranslations("level1Test");
 
   const alphabet = t("letters").split("");
+  const searchParams = useSearchParams();
+  const currentDifficulty = searchParams.get("difficulty") ?? "easy";
 
   const [shuffledAlphabet, setShuffledAlphabet] = useState<string[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -35,16 +38,38 @@ export default function Level1Test() {
 
   const currentLetter = shuffledAlphabet[questionIndex];
 
-  // Speak the current letter whenever it changes
-  useEffect(() => {
-    if (currentLetter) {
-      window.speechSynthesis.cancel(); // Cancel any ongoing speech
-      const utterance = new SpeechSynthesisUtterance(currentLetter);
-      utterance.lang = "en-US";
-      utterance.rate = 0.75; // adjust rate as needed
-      window.speechSynthesis.speak(utterance);
+  const submitProgress = async (score: number) => {
+    try {
+      const percent = score / shuffledAlphabet.length;
+      let newDifficulty = currentDifficulty;
+
+      if (percent < 0.5) {
+        if (currentDifficulty === "medium") newDifficulty = "easy";
+        else if (currentDifficulty === "hard") newDifficulty = "medium";
+      } else if (percent > 0.8) {
+        if (currentDifficulty === "easy") newDifficulty = "medium";
+        else if (currentDifficulty === "medium") newDifficulty = "hard";
+      }
+
+      await fetch("http://localhost:8000/submitTest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          level: 1,
+          score: percent.toFixed(2).toString(),
+          difficulty: newDifficulty,
+        }),
+      });
+    } catch (err) {
+      console.error("Error submitting test:", err);
     }
-  }, [currentLetter]);
+  };
+
+  const handleAnswer = () => {
+    const trimmed = userAnswer.trim().toUpperCase();
 
   const handleAnswer = () => {
     if (isSubmitting || isComposing) return;
@@ -90,6 +115,7 @@ export default function Level1Test() {
 
     if (questionIndex === shuffledAlphabet.length - 1) {
       setIsFinished(true);
+      submitProgress(correctCount + 1);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
