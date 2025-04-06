@@ -50,7 +50,7 @@ export default function Signin() {
           <div className="mt-10">
             <form
               action={login}
-              method="POST"
+              // method="POST"
               className="space-y-6"
               aria-labelledby="signin-form-title"
             >

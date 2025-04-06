@@ -19,7 +19,7 @@ declare const messages: {
     "description": "An error occurred. Please try again."
   },
   "homepage": {
-    "description": "Experience interactive Braille learning that adapts to your pace and enhances tactile skills.",
+    "description": "Experience interactive Braille learning that adapts to your pace",
     "getStarted": "Get Started",
     "skipToContent": "Skip to main content",
     "backgroundAriaLabel": "Decorative background showing braille learning environment",
