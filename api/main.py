@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, dashboard, levels, language, ws, generateContent, lcd_ws_server
+from routes import auth, dashboard, levels, language, ws, generateContent, lcd_ws_server, submit_test, update_score
 
 app = FastAPI()
 
@@ -27,4 +27,4 @@ app.include_router(generateContent.router)
 app.include_router(language.router)
 
 app.include_router(language.router)
-app.include_router(lcd_ws_server.router)
+app.include_router(ws.router)
