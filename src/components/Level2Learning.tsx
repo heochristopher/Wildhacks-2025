@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
-export default function AlphabetLearning() {
+export default function Level2Learning() {
+  const t = useTranslations("level2Learning");
   const [questionNumber, setQuestionNumber] = useState(1);
   const [isFinished, setIsFinished] = useState(false);
   const [questions, setQuestions] = useState<string[]>([]);
@@ -42,43 +44,81 @@ export default function AlphabetLearning() {
         setQuestionNumber((prev) => prev + 1);
       }
     } else {
-      setFeedback("❌ Incorrect. Try again!");
+      setFeedback(t("feedbackIncorrect"));
       setUserAnswer("");
     }
   };
 
   if (isLoading) {
-    return <div className="p-10 font-mono">Loading questions...</div>;
+    return (
+      <div className="p-10 font-mono">
+        {t("loading")}
+      </div>
+    );
   }
 
   if (isFinished) {
     return <EndOfLevel />;
   }
 
-  const currentWord = questions[questionNumber - 1] || "Loading...";
+  const currentWord = questions[questionNumber - 1] || t("loadingFallback", "Loading...");
 
   return (
-    <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Question {questionNumber} of 10</h2>
-      <h3 className="mb-2">Please read and then spell this word:</h3>
-      <div className="text-2xl mb-6 font-semibold">{currentWord}</div>
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
+      {/* Question count */}
+      <h2 id="questionCount" className="text-xl mb-4">
+        {t("questionCount", { current: questionNumber, total: 10 })}
+      </h2>
+      
+      {/* Instructions */}
+      <h3 id="instruction" className="mb-2">
+        {t("instruction")}
+      </h3>
+      
+      {/* Display current word */}
+      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+        {currentWord}
+      </div>
 
+      {/* Hidden label for input field */}
+      <label htmlFor="userAnswer" className="sr-only">
+        {t("inputLabel")}
+      </label>
+      
       <input
+        id="userAnswer"
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnswer();
+          }
+        }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
-        placeholder="Type your answer here"
+        placeholder={t("inputPlaceholder")}
+        maxLength={50}
+        aria-labelledby="instruction questionCount"
       />
 
-      {feedback && <p className="text-red-600 mb-2">{feedback}</p>}
+      {/* Feedback message */}
+      {feedback && (
+        <p role="alert" className="text-red-600 mb-2">
+          {feedback}
+        </p>
+      )}
 
+      {/* Submit button */}
       <button
         onClick={handleAnswer}
         className="px-6 py-2 cursor-pointer bg-green-700 text-white rounded hover:bg-green-600"
+        aria-label={t("submitAriaLabel")}
       >
-        Submit Answer
+        {t("submit")}
       </button>
-    </div>
+    </main>
   );
 }

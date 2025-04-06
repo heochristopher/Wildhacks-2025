@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -14,13 +15,17 @@ function shuffle<T>(array: T[]): T[] {
 }
 
 export default function Level1Test() {
+  const t = useTranslations("level1Test");
+
+  const alphabet = t("letters").split("");
+
   const [shuffledAlphabet, setShuffledAlphabet] = useState<string[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [attempts, setAttempts] = useState(0); // to track up to 2 tries
+  const [attempts, setAttempts] = useState(0); // track up to 2 tries
 
   useEffect(() => {
     setShuffledAlphabet(shuffle(alphabet));
@@ -33,14 +38,14 @@ export default function Level1Test() {
 
     if (trimmed === currentLetter) {
       setCorrectCount((prev) => prev + 1);
-      setFeedback("✅ Correct!");
+      setFeedback(t("feedbackCorrect"));
       nextQuestion();
     } else if (attempts === 0) {
-      setFeedback("❌ Incorrect. One more try!");
+      setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
       setUserAnswer("");
     } else {
-      setFeedback(`❌ Incorrect again. `);
+      setFeedback(t("feedbackIncorrectTwo"));
       nextQuestion();
       setUserAnswer("");
     }
@@ -58,7 +63,11 @@ export default function Level1Test() {
   };
 
   if (shuffledAlphabet.length === 0) {
-    return <div className="p-10 font-mono">Preparing test...</div>;
+    return (
+      <div className="p-10 font-mono">
+        {t("loadingTest")}
+      </div>
+    );
   }
 
   if (isFinished) {
@@ -68,28 +77,61 @@ export default function Level1Test() {
   }
 
   return (
-    <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Letter {questionIndex + 1} of 26</h2>
-      <h3 className="mb-2">Read the letter and then type it back:</h3>
-      <div className="text-4xl font-bold mb-6">{currentLetter}</div>
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
+      {/* Question count */}
+      <h2 id="questionCount" className="text-xl mb-4">
+        {t("questionCount", { current: questionIndex + 1, total: shuffledAlphabet.length })}
+      </h2>
+      
+      {/* Instructions */}
+      <h3 id="instruction" className="mb-2">
+        {t("instruction")}
+      </h3>
+      
+      {/* Display current letter with live region */}
+      <div className="text-4xl font-bold mb-6" aria-live="polite">
+        {currentLetter}
+      </div>
 
+      {/* Hidden label for screen readers */}
+      <label htmlFor="userAnswer" className="sr-only">
+        {t("inputLabel")}
+      </label>
+      
       <input
+        id="userAnswer"
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnswer();
+          }
+        }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
-        placeholder="Type the letter"
+        placeholder={t("inputPlaceholder")}
         maxLength={1}
+        aria-labelledby="instruction questionCount"
       />
 
-      {feedback && <p className="text-red-600 mb-2">{feedback}</p>}
+      {/* Feedback message announced immediately */}
+      {feedback && (
+        <p role="alert" className="text-red-600 mb-2">
+          {feedback}
+        </p>
+      )}
 
+      {/* Submit button with ARIA label */}
       <button
         onClick={handleAnswer}
         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
+        aria-label={t("submitAriaLabel")}
       >
-        Submit
+        {t("submit")}
       </button>
-    </div>
+    </main>
   );
 }

@@ -1,10 +1,15 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import EndOfLevel from "./EndOfLevel";
 
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-export default function Level1Test() {
+
+export default function Level1Learning() {
+  const t = useTranslations("level1Learning");
+
+  const alphabet = t("letters").split("");
+
   const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -23,7 +28,7 @@ export default function Level1Test() {
         setQuestionIndex((prev) => prev + 1);
       }
     } else {
-      setFeedback("❌ Incorrect. Try again!");
+      setFeedback(t("feedbackIncorrect"));
       setUserAnswer("");
     }
   };
@@ -31,28 +36,55 @@ export default function Level1Test() {
   if (isFinished) return <EndOfLevel />;
 
   return (
-    <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Letter {questionIndex + 1} of 26</h2>
-      <h3 className="mb-2">Read the letter and then type it back:</h3>
-      <div className="text-4xl font-bold mb-6">{currentLetter}</div>
+    <main role="main" className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
+      {/* Letter count and instructions */}
+      <h2 id="letterCount" className="text-xl mb-4">
+        {t("letterCount", { current: questionIndex + 1, total: 26 })}
+      </h2>
+      <h3 id="instruction" className="mb-2">
+        {t("instruction")}
+      </h3>
+      
+      {/* Current letter displayed with polite live region */}
+      <div className="text-4xl font-bold mb-6" aria-live="polite">
+        {currentLetter}
+      </div>
 
+      {/* Hidden label for screen readers */}
+      <label htmlFor="userAnswer" className="sr-only">
+        {t("inputLabel")}
+      </label>
       <input
+        id="userAnswer"
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnswer();
+          }
+        }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
-        placeholder="Type the letter"
+        placeholder={t("inputPlaceholder")}
         maxLength={1}
+        aria-labelledby="instruction letterCount"
       />
 
-      {feedback && <p className="text-red-600 mb-2">{feedback}</p>}
+      {/* Feedback message announced via role="alert" */}
+      {feedback && (
+        <p role="alert" className="text-red-600 mb-2">
+          {feedback}
+        </p>
+      )}
 
+      {/* Submit button with aria-label */}
       <button
         onClick={handleAnswer}
         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
+        aria-label={t("submitAriaLabel")}
       >
-        Submit
+        {t("submit")}
       </button>
-    </div>
+    </main>
   );
 }

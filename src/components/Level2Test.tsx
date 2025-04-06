@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
 
-export default function Level2Learning() {
+export default function Level2Test() {
+  const t = useTranslations("level2Test");
   const [questionNumber, setQuestionNumber] = useState(1);
   const [isFinished, setIsFinished] = useState(false);
   const [questions, setQuestions] = useState<string[]>([]);
@@ -36,14 +38,14 @@ export default function Level2Learning() {
 
     if (answer === currentWord) {
       setCorrectCount((prev) => prev + 1);
-      setFeedback("✅ Correct!");
+      setFeedback(t("feedbackCorrect"));
       nextQuestion();
     } else if (attempts === 0) {
-      setFeedback("❌ Incorrect. One more try!");
+      setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
       setUserAnswer("");
     } else {
-      setFeedback("❌ Incorrect again.");
+      setFeedback(t("feedbackIncorrectTwo"));
       nextQuestion();
     }
   };
@@ -59,39 +61,74 @@ export default function Level2Learning() {
   };
 
   if (isLoading) {
-    return <div className="p-10 font-mono">Loading questions...</div>;
-  }
-
-  if (isFinished) {
     return (
-      <EndOfTest score={{ correct: correctCount, total: 10 }} />
+      <div className="p-10 font-mono">
+        {t("loading")}
+      </div>
     );
   }
 
-  const currentWord = questions[questionNumber - 1] || "Loading...";
+  if (isFinished) {
+    return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
+  }
+
+  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
 
   return (
-    <div className="p-10 font-mono min-h-screen flex flex-col items-center justify-center">
-      <h2 className="text-xl mb-4">Question {questionNumber} of 10</h2>
-      <h3 className="mb-2">Please read and then spell this word:</h3>
-      <div className="text-2xl mb-6 font-semibold">{currentWord}</div>
+    <main
+      role="main"
+      className="p-10 font-mono min-h-screen flex flex-col items-center justify-center"
+    >
+      {/* Question Count */}
+      <h2 id="questionCount" className="text-xl mb-4">
+        {t("questionCount", { current: questionNumber, total: 10 })}
+      </h2>
 
+      {/* Instructions */}
+      <h3 id="instruction" className="mb-2">
+        {t("instruction")}
+      </h3>
+
+      {/* Display current word with live region */}
+      <div className="text-2xl mb-6 font-semibold" aria-live="polite">
+        {currentWord}
+      </div>
+
+      {/* Hidden label for screen readers */}
+      <label htmlFor="userAnswer" className="sr-only">
+        {t("inputLabel")}
+      </label>
       <input
+        id="userAnswer"
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAnswer();
+          }
+        }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black"
-        placeholder="Type your answer here"
+        placeholder={t("inputPlaceholder")}
+        maxLength={50}
+        aria-labelledby="instruction questionCount"
       />
 
-      {feedback && <p className="text-red-600 mb-2">{feedback}</p>}
+      {/* Feedback message announced via role="alert" */}
+      {feedback && (
+        <p role="alert" className="text-red-600 mb-2">
+          {feedback}
+        </p>
+      )}
 
+      {/* Submit Button */}
       <button
         onClick={handleAnswer}
         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-600"
+        aria-label={t("submitAriaLabel")}
       >
-        Submit Answer
+        {t("submit")}
       </button>
-    </div>
+    </main>
   );
 }
