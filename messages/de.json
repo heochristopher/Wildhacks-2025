@@ -1,0 +1,182 @@
+{
+    "LocaleSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, en {🇺🇸 Englisch} ko {🇰🇷 Koreanisch} other {Unbekannt}}"
+    },
+    "Navigation": {
+      "home": "Startseite",
+      "profile": "Profil"
+    },
+    "NotFoundPage": {
+      "title": "Seite nicht gefunden",
+      "description": "Bitte überprüfen Sie die URL oder verwenden Sie das Navigationsmenü."
+    },
+    "Error": {
+      "title": "Etwas ist schiefgelaufen!",
+      "description": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "homepage": {
+      "description": "Erleben Sie interaktives Braille-Lernen, das sich Ihrem Tempo anpasst und Ihre taktilen Fähigkeiten verbessert.",
+      "getStarted": "Loslegen",
+      "skipToContent": "Zum Hauptinhalt springen",
+      "backgroundAriaLabel": "Dekorativer Hintergrund, der eine Braille-Lernumgebung zeigt",
+      "getStartedAriaLabel": "Starten Sie das Braille-Lernen",
+      "logoAlt": "DotByDot - Interaktive Braille-Lernplattform"
+    },
+    "footer": {
+      "footerHeading": "Fußzeile",
+      "createdBy": "Erstellt von: Chris Heo, Hajo Wolfram, Anthony Chung, Elaine Cui",
+      "gitHub": "GitHub",
+      "languageSelectAriaLabel": "Sprache auswählen"
+    },
+    "auth": {
+      "signInTitle": "Melden Sie sich bei Ihrem Konto an",
+      "notMember": "Noch kein Mitglied?",
+      "registerLink": "Kostenlos registrieren",
+      "emailLabel": "E-Mail-Adresse",
+      "passwordLabel": "Passwort",
+      "signInButton": "Anmelden",
+      "signInButtonAria": "Anmeldeformular absenden",
+      "signinImageAlt": "Illustratives Bild für die Anmeldeseite"
+    },
+    "levelsDashboard": {
+      "welcomeMessage": "Willkommen in Ihrem Dashboard!",
+      "dashboardInstructions": "Klicken Sie auf einen Level, um zu lernen oder Ihre Fähigkeiten zu testen.",
+      "loading": "Fortschritt wird geladen...",
+      "levelGroup": "Level {group}",
+      "level1LearningTitle": "Level 1: Lernen",
+      "level1LearningDescription": "Erlernen Sie die Braille-Darstellung jedes Buchstabens.",
+      "level1TestTitle": "Level 1: Testen",
+      "level1TestDescription": "Testen Sie Ihr Wissen über das Braille-Alphabet.",
+      "level2LearningTitle": "Level 2: Lernen",
+      "level2LearningDescription": "Üben Sie das Lesen und Schreiben von Wörtern.",
+      "level2TestTitle": "Level 2: Testen",
+      "level2TestDescription": "Testen Sie Ihr Wissen über einfache Wörter.",
+      "level3ReadingTitle": "Level 3: Lesen",
+      "level3ReadingDescription": "Erfahren Sie, wie man Braille-Sätze liest.",
+      "level3WritingTitle": "Level 3: Schreiben",
+      "level3WritingDescription": "Lernen Sie, Sätze in Braille zu schreiben.",
+      "lastCompleted": "Zuletzt abgeschlossen: {completed}/{total}",
+      "scoreLabel": "Punktzahl: {score}",
+      "difficultyLabel": "Schwierigkeit: {difficulty}"
+    },
+    "levelPage": {
+      "level1LearningTitle": "Level 1: Lernen",
+      "level1LearningDescription": "Erlernen Sie die Braille-Darstellung jedes Buchstabens.",
+      "level1TestTitle": "Level 1: Testen",
+      "level1TestDescription": "Testen Sie Ihr Wissen über das Braille-Alphabet.",
+      "level2LearningTitle": "Level 2: Lernen",
+      "level2LearningDescription": "Üben Sie das Lesen und Schreiben von Wörtern.",
+      "level2TestTitle": "Level 2: Testen",
+      "level2TestDescription": "Testen Sie Ihr Wissen über einfache Wörter.",
+      "level3ReadingTitle": "Level 3: Lesen",
+      "level3ReadingDescription": "Erfahren Sie, wie man Braille-Sätze liest.",
+      "level3WritingTitle": "Level 3: Schreiben",
+      "level3WritingDescription": "Lernen Sie, Sätze in Braille zu schreiben."
+    },
+    "levelOverview": {
+      "start": "Starten",
+      "startAriaLabel": "Level starten"
+    },
+    "level1Learning": {
+      "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "letterCount": "Buchstabe {current} von {total}",
+      "instruction": "Lesen Sie den Buchstaben und geben Sie ihn dann ein:",
+      "inputLabel": "Geben Sie den oben angezeigten Buchstaben ein",
+      "inputPlaceholder": "Buchstabe eingeben",
+      "feedbackIncorrect": "Falsch. Versuchen Sie es erneut!",
+      "submit": "Absenden",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "language": "Englisch"
+    },
+    "level1Test": {
+      "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "loadingTest": "Test wird vorbereitet...",
+      "questionCount": "Buchstabe {current} von {total}",
+      "instruction": "Lesen Sie den Buchstaben und geben Sie ihn dann ein:",
+      "inputLabel": "Geben Sie den oben angezeigten Buchstaben ein",
+      "inputPlaceholder": "Buchstabe eingeben",
+      "feedbackCorrect": "Richtig!",
+      "feedbackIncorrectOne": "Falsch. Versuchen Sie es noch einmal!",
+      "feedbackIncorrectTwo": "Erneut falsch.",
+      "submit": "Absenden",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "language": "Englisch"
+    },
+    "level2Learning": {
+      "loading": "Fragen werden geladen...",
+      "loadingFallback": "Lädt...",
+      "questionCount": "Frage {current} von {total}",
+      "instruction": "Lesen Sie das Wort und buchstabieren Sie es:",
+      "inputLabel": "Geben Sie Ihre Antwort hier ein",
+      "inputPlaceholder": "Antwort eingeben",
+      "feedbackIncorrect": "Falsch. Versuchen Sie es erneut!",
+      "submit": "Antwort absenden",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "language": "Deutsch"
+    },
+    "level2Test": {
+      "loading": "Fragen werden geladen...",
+      "loadingFallback": "Lädt...",
+      "questionCount": "Frage {current} von {total}",
+      "instruction": "Lesen Sie das Wort und buchstabieren Sie es:",
+      "inputLabel": "Geben Sie Ihre Antwort hier ein",
+      "inputPlaceholder": "Antwort eingeben",
+      "feedbackCorrect": "Richtig!",
+      "feedbackIncorrectOne": "Falsch. Versuchen Sie es noch einmal!",
+      "feedbackIncorrectTwo": "Erneut falsch.",
+      "submit": "Antwort absenden",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "language": "Deutsch"
+    },
+    "level3Reading": {
+      "errorFetch": "Fehler beim Laden der Leseaktivität",
+      "loading": "Leseaktivität wird geladen...",
+      "questionCount": "Lesung {current} von {total}",
+      "instruction": "Lesen Sie den Satz und beantworten Sie die Frage:",
+      "inputLabel": "Geben Sie Ihre Antwort hier ein",
+      "inputPlaceholder": "Antwort eingeben",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "submit": "Antwort absenden",
+      "feedbackCorrect": "Richtig!",
+      "feedbackIncorrectOne": "Falsch. Versuchen Sie es noch einmal!",
+      "feedbackIncorrectTwo": "Erneut falsch.",
+      "lang": "de-DE",
+      "rate": "1",
+      "language": "Deutsch"
+    },
+    "level3Writing": {
+      "loading": "Sätze werden geladen...",
+      "questionCount": "Satz {current} von {total}",
+      "instruction": "Lesen Sie den Satz genau und geben Sie ihn ein:",
+      "inputLabel": "Geben Sie Ihre Antwort hier ein",
+      "inputPlaceholder": "Antwort eingeben",
+      "feedbackCorrect": "Richtig!",
+      "feedbackIncorrectOne": "Falsch. Versuchen Sie es noch einmal!",
+      "feedbackIncorrectTwo": "Erneut falsch.",
+      "submit": "Antwort absenden",
+      "submitAriaLabel": "Ihre Antwort absenden",
+      "errorFetch": "Fehler beim Laden der Sätze",
+      "lang": "de-DE",
+      "rate": "1",
+      "language": "Deutsch"
+    },
+    "endOfTest": {
+      "congrats": "Tolle Arbeit!",
+      "scoreText": "Sie haben {correct} von {total} richtig ({percentage}%)",
+      "continuePrompt": "Möchten Sie fortfahren oder zur Startseite zurückkehren?",
+      "backLevels": "Zurück zu den Levels",
+      "backLevelsAria": "Zurück zu den Levels",
+      "replayTest": "Test wiederholen",
+      "replayTestAria": "Test wiederholen"
+    },
+    "endOfLevel": {
+      "congrats": "Tolle Arbeit!",
+      "continuePrompt": "Möchten Sie fortfahren oder zur Startseite zurückkehren?",
+      "backLevels": "Zurück zu den Levels",
+      "backLevelsAria": "Zurück zu den Levels",
+      "replayLevel": "Level wiederholen",
+      "replayLevelAria": "Level wiederholen"
+    }
+  }
+  

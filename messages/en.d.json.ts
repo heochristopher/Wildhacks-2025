@@ -19,7 +19,7 @@ declare const messages: {
     "description": "An error occurred. Please try again."
   },
   "homepage": {
-    "description": "Experience interactive Braille learning that adapts to your pace and enhances tactile skills.",
+    "description": "Experience interactive Braille learning that adapts to your pace",
     "getStarted": "Get Started",
     "skipToContent": "Skip to main content",
     "backgroundAriaLabel": "Decorative background showing braille learning environment",
@@ -120,7 +120,7 @@ declare const messages: {
     "language": "English"
   },
   "level2Test": {
-    "loading": "Loading questions...",
+    "loadingTest": "Loading questions...",
     "loadingFallback": "Loading...",
     "questionCount": "Question {current} of {total}",
     "instruction": "Please read and then spell this word:",
@@ -131,7 +131,9 @@ declare const messages: {
     "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit Answer",
     "submitAriaLabel": "Submit your answer",
-    "language": "English"
+    "language": "English",
+    "lang": "en-US",
+    "rate": "0.75"
   },
   "level3Reading": {
     "errorFetch": "Error fetching reading activity",

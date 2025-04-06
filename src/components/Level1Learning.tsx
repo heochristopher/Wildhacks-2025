@@ -12,6 +12,8 @@ import EndOfLevel from "./EndOfLevel";
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isFinished, setIsFinished] = useState(false);
+  const [isComposing, setIsComposing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentLetter =
     questionIndex !== null ? alphabet[questionIndex] : undefined;
@@ -81,6 +83,9 @@ import EndOfLevel from "./EndOfLevel";
   }, [currentLetter]);
 
   const handleAnswer = () => {
+    if (isSubmitting || isComposing) return;
+    setIsSubmitting(true);
+
     const trimmedInput = userAnswer.trim();
     // Check if currentLetter is a Latin character using a regex
     const isLatin = /^[A-Za-z]$/.test(currentLetter);
@@ -94,8 +99,10 @@ import EndOfLevel from "./EndOfLevel";
       if (questionIndex === alphabet.length - 1) {
         submitProgress(questionIndex); // Submit once on final question
         setIsFinished(true);
+        setIsSubmitting(false);
       } else {
         setQuestionIndex((prev) => (prev !== null ? prev + 1 : 0));
+        setIsSubmitting(false);
       }
     } else {
       setFeedback(t("feedbackIncorrect"));
@@ -132,20 +139,25 @@ import EndOfLevel from "./EndOfLevel";
         {t("inputLabel")}
       </label>
       <input
-        id="userAnswer"
-        type="text"
-        value={userAnswer}
-        onChange={(e) => setUserAnswer(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleAnswer();
-          }
-        }}
-        className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
-        placeholder={t("inputPlaceholder")}
-        maxLength={1}
-        aria-labelledby="instruction letterCount"
-      />
+          id="userAnswer"
+          type="text"
+          value={userAnswer}
+          onChange={(e) => setUserAnswer(e.target.value)}
+          onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={(e) => {
+            setUserAnswer(e.target.value);
+            setIsComposing(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !isComposing) {
+              handleAnswer();
+            }
+          }}
+          className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
+          placeholder={t("inputPlaceholder")}
+          maxLength={1}
+          aria-labelledby="instruction questionCount"
+        />
 
       {/* Feedback message announced via role="alert" */}
       {feedback && (

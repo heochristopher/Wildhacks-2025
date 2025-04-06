@@ -14,7 +14,7 @@ export default function Level2Test() {
   const [feedback, setFeedback] = useState("");
   const [correctCount, setCorrectCount] = useState(0);
   const [attempts, setAttempts] = useState(0); // 0 or 1
-
+  const [isComposing, setIsComposing] = useState(false);
   // Create a ref for the input to auto-focus it.
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,12 +55,22 @@ export default function Level2Test() {
   const handleAnswer = () => {
     const currentWord = questions[questionNumber - 1] || t("loadingFallback");
     const trimmedAnswer = userAnswer.trim().toLowerCase();
-    const expectedAnswer = currentWord.trim().toLowerCase();
+    const isLatin = /^[A-Za-z]$/.test(currentWord);
+    const expectedAnswer = isLatin
+      ? currentWord.toUpperCase().normalize("NFC")
+      : currentWord.normalize("NFD");
+    const actualInput = isLatin
+      ? trimmedAnswer.toUpperCase().normalize("NFC")
+      : trimmedAnswer.normalize("NFD");
 
-    if (trimmedAnswer === expectedAnswer) {
+    console.log(actualInput, expectedAnswer);
+
+    if (actualInput === expectedAnswer) {
       setCorrectCount((prev) => prev + 1);
       setFeedback(t("feedbackCorrect"));
-      nextQuestion();
+      setTimeout(() => {
+        nextQuestion();
+      }, 1000);
     } else if (attempts === 0) {
       setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
@@ -73,10 +83,14 @@ export default function Level2Test() {
       } else {
         nextQuestion();
       }
+      setTimeout(() => {  
+        nextQuestion();
+      }, 1000);
     }
   };
 
   const nextQuestion = () => {
+    setFeedback("");
     setUserAnswer("");
     setAttempts(0);
     if (questionNumber >= 10) {
@@ -158,18 +172,21 @@ export default function Level2Test() {
       </label>
       <input
         id="userAnswer"
-        ref={inputRef}
         type="text"
         value={userAnswer}
         onChange={(e) => setUserAnswer(e.target.value)}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={(e) => {
+          setIsComposing(false);
+          setUserAnswer(e.target.value);
+        }}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !isComposing) {
             handleAnswer();
           }
         }}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
         placeholder={t("inputPlaceholder")}
-        maxLength={50}
         aria-labelledby="instruction questionCount"
       />
 

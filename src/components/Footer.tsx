@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 const languages = [
   { code: "en", label: "English" },
   { code: "ko", label: "한국어" },
+  { code: "de", label: "Deutsch" },
 ];
 
 export default function Footer() {

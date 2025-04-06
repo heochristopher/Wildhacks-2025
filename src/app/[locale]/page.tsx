@@ -18,12 +18,12 @@ export default function Home() {
     <div role="main">
       <div className="relative font-mono min-h-screen w-full overflow-hidden">
         {/* Skip to main content link for keyboard users */}
-        <a
+        {/* <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-white focus:text-green-800"
         >
           {t("skipToContent")}
-        </a>
+        </a> */}
 
         {/* Background image with proper alt text and ARIA */}
         <div
