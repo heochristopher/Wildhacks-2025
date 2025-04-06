@@ -2,6 +2,7 @@ import json
 import asyncio
 import serial
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from utils.braille import LATIN_TO_BRAILLE, BRAILLE_TO_LATIN
 
 router = APIRouter(tags=["WebSocket"])
 
@@ -41,8 +42,8 @@ if ser is not None:
                     if ser.in_waiting:
                         # Read a line from the Arduino and decode it
                         line = ser.readline().decode('utf-8').strip()
-                        # Create a JSON message with type "keyboard"
-                        message = {"type": "keyboard", "payload": line}
+                        decoded_text = BRAILLE_TO_LATIN.get(line)
+                        message = {"type": "keyboard", "payload": decoded_text}
                         await websocket.send_json(message)
                     await asyncio.sleep(0.1)
             except Exception as e:
@@ -68,12 +69,26 @@ if ser is not None:
 
                     if message_type == "lcd":
                         try:
-                            text_to_send = data["payload"]  # "hi"
-                            ser.write(text_to_send.encode('utf-8') + b'\n')
-                            # Convert the binary string to bytes and send to Arduino
-                            # payload = payload.encode('utf-8')
-                            # ser.write(payload)
-                            # Optionally, acknowledge receipt
+                            character = payload
+                            print(f"Received character for LCD: {character}")
+                            if payload is None:
+                                await websocket.send_json({"type": "error", "payload": "Character not found in mapping"})
+                                continue
+
+
+                            # pattern = text_to_send.encode('utf-8') + b'\n'
+
+                            # print(type(pattern))
+                            # print(f"Sending to serial: {pattern}")
+                            pattern = ""
+                            for char in payload:
+                                pattern + (LATIN_TO_BRAILLE.get(char, "000000"))
+                            
+                            
+                            text_to_send = pattern.encode('utf-8') + b'\n'
+                            
+                            ser.write(text_to_send)
+
                             await websocket.send_json({"type": "ack", "payload": "LCD command sent"})
                         except Exception as e:
                             await websocket.send_json({"type": "error", "payload": f"Error sending LCD command: {str(e)}"})
