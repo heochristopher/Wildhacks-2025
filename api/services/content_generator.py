@@ -4,9 +4,9 @@ import json
 def generate_words(n: int = 10, difficulty: str = "easy", language: str = "English") -> list[str]:
     prompt = f"""
 Generate a list of {n} unique words in **{language}** that are **{difficulty}** level (e.g., 'hard' should return more complex vocabulary than 'medium' or 'easy').
-- **Easy words should be 2-3 letters long**
-- **Medium words should be 3-5 letters long**
-- **Hard words should be 5-6 letters long**
+- **The list of easy words should have about 2 2-letter words, 5 3-letter words, and 3 4-letter words**
+- **The list of medium words should have about 2 4-letter words, 5 5-letter words, and 3 6-letter words**
+- **The list of hard words should have about 2 6-letter words, 5 7-letter words, and 3 8-letter words**
 - Do **not** include markdown, code fences, or explanation
 - Use **common words** that are easy to read and understand
 - Just return a **valid raw JSON array** of strings
