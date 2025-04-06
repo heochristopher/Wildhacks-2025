@@ -1,62 +1,61 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Footer from "@/app/footer";
+import { useTranslations } from "next-intl";
 
 export default function LevelsDashboard() {
   const router = useRouter();
+  const t = useTranslations("levelsDashboard");
 
   const levels = [
     {
       id: "1",
-      title: "Level 1",
-      options: [
-        { id: "1", label: "Learning" },
-        { id: "2", label: "Test" },
-      ],
+      title: "Level 1: Learning",
+      description: "Learn the braille representation of each letter.",
     },
     {
       id: "2",
-      title: "Level 2",
-      options: [
-        { id: "3", label: "Learning" },
-        { id: "4", label: "Test" },
-      ],
+      title: "Level 1: Test",
+      description: "Test your knowledge of the braille alphabet.",
     },
     {
       id: "3",
-      title: "Level 3",
-      options: [
-        { id: "5", label: "Reading" },
-        { id: "6", label: "Writing" },
-      ],
+      title: "Level 2: Learning",
+      description: "Practice reading and writing words.",
+    },
+    {
+      id: "4",
+      title: "Level 2: Test",
+      description: "Test your knowledge of simple words.",
+    },
+    {
+      id: "5",
+      title: "Level 3: Reading",
+      description: "Learn how to read braille sentences.",
+    },
+    {
+      id: "6",
+      title: "Level 3: Writing",
+      description: "Learn how to write sentences with braille.",
     },
   ];
 
   return (
     <div>
     <div className="min-h-screen p-10 bg-gray-100 font-mono">
-      <h1 className="text-4xl font-bold text-center mb-10">Welcome to Your Dashboard</h1>
-      <h1 className="text-xl font-bold text-center mb-10">Please choose a level and mode</h1>
-      <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+      <h1 className="text-4xl font-bold text-center mb-10">Choose a Braille Level</h1>
+      <div className="grid gap-6 md:grid-cols-3">
         {levels.map((level) => (
-          <div key={level.id} className="flex flex-col py-16 sm:flex-row sm:items-center justify-between bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-2 sm:mb-0">{level.title}</h2>
-            <div className="flex gap-4">
-              {level.options.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => router.push(`/levels/${option.id}`)}
-                  className="bg-green-800 text-lg text-white px-4 py-2 rounded cursor-pointer hover:bg-green-700 transition"
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
+          <div
+            key={level.id}
+            onClick={() => router.push(`/levels/${level.id}`)}
+            className="cursor-pointer bg-white shadow-md rounded-lg p-6 hover:bg-green-100 transition"
+          >
+            <h2 className="text-xl font-semibold">{level.title}</h2>
+            <p className="text-sm text-gray-600 mt-2">{level.description}</p>
           </div>
         ))}
       </div>
     </div>
-    <Footer />
     </div>
   );
 }
