@@ -129,7 +129,7 @@ export default function Level3Reading() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score + 1) / sentencePairs.length;
+      const percent = (score ) / sentencePairs.length;
       let newDifficulty = currentDifficulty;
 
       if (percent < 0.5) {
@@ -148,6 +148,8 @@ export default function Level3Reading() {
           level: 3,
           score: percent.toFixed(2).toString(),
           difficulty: newDifficulty,
+          isReading: true
+
         }),
       });
     } catch (err) {

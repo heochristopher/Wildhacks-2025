@@ -77,7 +77,7 @@ export default function LevelsDashboard() {
       title: t("level3WritingTitle"),
       description: t("level3WritingDescription"),
       levelKey: "level3",
-      typeKey: "test",
+      typeKey: "writing",
       total: 3,
     },
   ];
