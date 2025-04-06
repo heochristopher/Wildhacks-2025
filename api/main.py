@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, dashboard, levels, language, ws
+from routes import auth, dashboard, levels, language, ws, submit_test, update_score
 
 app = FastAPI()
 
@@ -25,3 +25,5 @@ app.include_router(dashboard.router)
 app.include_router(levels.router)
 app.include_router(language.router)
 app.include_router(ws.router)
+app.include_router(submit_test.router)
+app.include_router(update_score.router)
