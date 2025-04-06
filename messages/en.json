@@ -72,8 +72,75 @@
     "start": "Start",
     "startAriaLabel": "Start level"
   },
-  "LocaleLayout": {
-    "title": "dotbydot - Learn Braille",
-    "description": "An accessible platform for learning Braille"
+  "level1Learning": {
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letterCount": "Letter {current} of {total}",
+    "instruction": "Read the letter and then type it back:",
+    "inputLabel": "Type the letter shown above",
+    "inputPlaceholder": "Type the letter",
+    "feedbackIncorrect": "❌ Incorrect. Try again!",
+    "submit": "Submit",
+    "submitAriaLabel": "Submit your answer"
+  },
+  "level1Test": {
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "loadingTest": "Preparing test...",
+    "questionCount": "Letter {current} of {total}",
+    "instruction": "Read the letter and then type it back:",
+    "inputLabel": "Type the letter shown above",
+    "inputPlaceholder": "Type the letter",
+    "feedbackCorrect": "✅ Correct!",
+    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
+    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "submit": "Submit",
+    "submitAriaLabel": "Submit your answer"
+  },
+  "level2Learning": {
+    "loading": "Loading questions...",
+    "loadingFallback": "Loading...",
+    "questionCount": "Question {current} of {total}",
+    "instruction": "Please read and then spell this word:",
+    "inputLabel": "Type your answer here",
+    "inputPlaceholder": "Type your answer here",
+    "feedbackIncorrect": "❌ Incorrect. Try again!",
+    "submit": "Submit Answer",
+    "submitAriaLabel": "Submit your answer"
+  },
+  "level2Test": {
+    "loading": "Loading questions...",
+    "loadingFallback": "Loading...",
+    "questionCount": "Question {current} of {total}",
+    "instruction": "Please read and then spell this word:",
+    "inputLabel": "Type your answer here",
+    "inputPlaceholder": "Type your answer here",
+    "feedbackCorrect": "✅ Correct!",
+    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
+    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "submit": "Submit Answer",
+    "submitAriaLabel": "Submit your answer"
+  },
+  "level3Reading": {
+    "loading": "Loading reading activity...",
+    "questionCount": "Reading {current} of {total}",
+    "inputLabel": "Type your answer here",
+    "inputPlaceholder": "Type your answer",
+    "feedbackCorrect": "✅ Correct!",
+    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
+    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "submit": "Submit Answer",
+    "submitAriaLabel": "Submit your answer"
+  },
+  "level3Writing": {
+    "loading": "Loading sentences...",
+    "questionCount": "Sentence {current} of {total}",
+    "instruction": "Read and type this sentence exactly:",
+    "inputLabel": "Type your answer here",
+    "inputPlaceholder": "Type your answer here",
+    "feedbackCorrect": "✅ Correct!",
+    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
+    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "submit": "Submit Answer",
+    "submitAriaLabel": "Submit your answer",
+    "errorFetch": "Failed to fetch sentences"
   }
 } 

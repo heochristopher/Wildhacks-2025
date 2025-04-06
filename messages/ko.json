@@ -1,43 +1,43 @@
 {
   "LocaleSwitcher": {
     "label": "언어 변경",
-    "locale": "{locale, select, en {🇺🇸 English} ko {🇰🇷 한국어} other {알 수 없음}}"
+    "locale": "{locale, select, en {🇺🇸 영어} ko {🇰🇷 한국어} other {알 수 없음}}"
   },
   "Navigation": {
     "home": "홈",
     "profile": "프로필"
   },
   "NotFoundPage": {
-    "title": "페이지를 찾을 수 없습니다",
-    "description": "URL을 확인하거나 네비게이션 메뉴를 사용해주세요."
+    "title": "페이지를 찾을 수 없음",
+    "description": "URL을 확인하거나 내비게이션 메뉴를 사용하세요."
   },
   "Error": {
-    "title": "오류가 발생했습니다!",
-    "description": "오류가 발생했습니다. 다시 시도해주세요."
+    "title": "문제가 발생했습니다!",
+    "description": "오류가 발생했습니다. 다시 시도하세요."
   },
   "homepage": {
-    "description": "당신의 속도에 맞춰 학습하며 촉각 능력을 향상시키는 인터랙티브 점자 학습을 경험해 보세요.",
+    "description": "자신의 속도에 맞춰 학습하고 촉각 능력을 향상시키는 인터랙티브 점자 학습을 경험해 보세요.",
     "getStarted": "시작하기",
     "skipToContent": "주요 내용으로 건너뛰기",
-    "backgroundAriaLabel": "점자 학습 환경을 보여주는 장식적인 배경",
-    "getStartedAriaLabel": "점자 학습 시작하기",
+    "backgroundAriaLabel": "점자 학습 환경을 보여주는 장식 배경",
+    "getStartedAriaLabel": "점자 학습을 시작하세요",
     "logoAlt": "DotByDot - 인터랙티브 점자 학습 플랫폼"
   },
   "footer": {
     "footerHeading": "푸터",
     "createdBy": "제작: 허남윤, 김하요, 정태인, 수이린",
-    "gitHub": "깃허브",
+    "gitHub": "GitHub",
     "languageSelectAriaLabel": "언어 선택"
   },
   "auth": {
     "signInTitle": "계정에 로그인",
     "notMember": "회원이 아니신가요?",
-    "registerLink": "무료로 가입하기",
+    "registerLink": "무료 등록",
     "emailLabel": "이메일 주소",
     "passwordLabel": "비밀번호",
     "signInButton": "로그인",
     "signInButtonAria": "로그인 폼 제출",
-    "signinImageAlt": "로그인 페이지를 설명하는 이미지"
+    "signinImageAlt": "로그인 페이지를 위한 이미지"
   },
   "levelsDashboard": {
     "pageTitle": "점자 레벨 선택",
@@ -46,13 +46,13 @@
     "level1TestTitle": "레벨 1: 테스트",
     "level1TestDescription": "점자 알파벳에 대한 지식을 테스트하세요.",
     "level2LearningTitle": "레벨 2: 학습",
-    "level2LearningDescription": "단어 읽기 및 쓰기 연습을 하세요.",
+    "level2LearningDescription": "단어 읽기 및 쓰기를 연습하세요.",
     "level2TestTitle": "레벨 2: 테스트",
     "level2TestDescription": "간단한 단어에 대한 지식을 테스트하세요.",
     "level3ReadingTitle": "레벨 3: 읽기",
-    "level3ReadingDescription": "점자 문장을 읽는 법을 배우세요.",
+    "level3ReadingDescription": "점자 문장을 읽는 방법을 배우세요.",
     "level3WritingTitle": "레벨 3: 쓰기",
-    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요."
+    "level3WritingDescription": "점자로 문장을 쓰는 방법을 배우세요."
   },
   "levelPage": {
     "level1LearningTitle": "레벨 1: 학습",
@@ -60,65 +60,87 @@
     "level1TestTitle": "레벨 1: 테스트",
     "level1TestDescription": "점자 알파벳에 대한 지식을 테스트하세요.",
     "level2LearningTitle": "레벨 2: 학습",
-    "level2LearningDescription": "단어 읽기 및 쓰기 연습을 하세요.",
+    "level2LearningDescription": "단어 읽기 및 쓰기를 연습하세요.",
     "level2TestTitle": "레벨 2: 테스트",
     "level2TestDescription": "간단한 단어에 대한 지식을 테스트하세요.",
     "level3ReadingTitle": "레벨 3: 읽기",
-    "level3ReadingDescription": "점자 문장을 읽는 법을 배우세요.",
+    "level3ReadingDescription": "점자 문장을 읽는 방법을 배우세요.",
     "level3WritingTitle": "레벨 3: 쓰기",
-    "level3WritingDescription": "점자로 문장을 쓰는 법을 배우세요."
+    "level3WritingDescription": "점자로 문장을 쓰는 방법을 배우세요."
   },
   "levelOverview": {
     "start": "시작",
     "startAriaLabel": "레벨 시작"
   },
-  "profile": {
-    "title": "학습 진도",
-    "subtitle": "점자 학습 여정을 추적하세요",
-    "level": "레벨",
-    "progress": "진행률",
-    "overview": {
-      "beginner": {
-        "title": "초급 레벨",
-        "description": "점자 읽기와 쓰기의 기초를 마스터하세요",
-        "skills": [
-          "점자 알파벳 학습",
-          "기본 문자 인식",
-          "간단한 단어 읽기"
-        ]
-      },
-      "intermediate": {
-        "title": "중급 레벨",
-        "description": "점자 의사소통의 유창함을 키우세요",
-        "skills": [
-          "고급 문자 조합",
-          "일반적인 단어 패턴",
-          "기본 문장 구조"
-        ]
-      },
-      "advanced": {
-        "title": "고급 레벨",
-        "description": "점자에 능숙해지세요",
-        "skills": [
-          "복잡한 문장 읽기",
-          "속독 기술",
-          "전문 점자 형식"
-        ]
-      }
-    }
+  "level1Learning": {
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "letterCount": "전체 {total}개 중 {current}번째 글자",
+    "instruction": "글자를 읽고 입력하세요:",
+    "inputLabel": "위에 표시된 글자를 입력하세요",
+    "inputPlaceholder": "글자를 입력하세요",
+    "feedbackIncorrect": "❌ 틀렸습니다. 다시 시도하세요!",
+    "submit": "제출",
+    "submitAriaLabel": "답변 제출"
   },
-  "levels": {
-    "beginner": "초급",
-    "intermediate": "중급",
-    "advanced": "고급"
+  "level1Test": {
+    "letters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "loadingTest": "테스트 준비 중...",
+    "questionCount": "전체 {total}개 중 {current}번째 글자",
+    "instruction": "글자를 읽고 입력하세요:",
+    "inputLabel": "위에 표시된 글자를 입력하세요",
+    "inputPlaceholder": "글자를 입력하세요",
+    "feedbackCorrect": "✅ 정답입니다!",
+    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
+    "submit": "제출",
+    "submitAriaLabel": "답변 제출"
   },
-  "courses": {
-    "brailleBasics": "점자 기초",
-    "intermediateBraille": "점자 중급",
-    "advancedBraille": "점자 고급"
+  "level2Learning": {
+    "loading": "문제를 불러오는 중...",
+    "loadingFallback": "불러오는 중...",
+    "questionCount": "전체 {total}문제 중 {current}번째 문제",
+    "instruction": "단어를 읽고 철자를 입력하세요:",
+    "inputLabel": "여기에 답을 입력하세요",
+    "inputPlaceholder": "답을 입력하세요",
+    "feedbackIncorrect": "❌ 틀렸습니다. 다시 시도하세요!",
+    "submit": "답 제출",
+    "submitAriaLabel": "답변 제출"
   },
-  "LocaleLayout": {
-    "title": "dotbydot - 점자 학습",
-    "description": "점자 학습을 위한 접근성 플랫폼"
+  "level2Test": {
+    "loading": "문제를 불러오는 중...",
+    "loadingFallback": "불러오는 중...",
+    "questionCount": "전체 {total}문제 중 {current}번째 문제",
+    "instruction": "단어를 읽고 철자를 입력하세요:",
+    "inputLabel": "여기에 답을 입력하세요",
+    "inputPlaceholder": "답을 입력하세요",
+    "feedbackCorrect": "✅ 정답입니다!",
+    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
+    "submit": "답 제출",
+    "submitAriaLabel": "답변 제출"
+  },
+  "level3Reading": {
+    "loading": "읽기 활동을 불러오는 중...",
+    "questionCount": "전체 {total}개 중 {current}번째 읽기",
+    "inputLabel": "여기에 답을 입력하세요",
+    "inputPlaceholder": "답을 입력하세요",
+    "feedbackCorrect": "✅ 정답입니다!",
+    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
+    "submit": "답 제출",
+    "submitAriaLabel": "답변 제출"
+  },
+  "level3Writing": {
+    "loading": "문장을 불러오는 중...",
+    "questionCount": "전체 {total}개 중 {current}번째 문장",
+    "instruction": "문장을 정확하게 읽고 입력하세요:",
+    "inputLabel": "여기에 답을 입력하세요",
+    "inputPlaceholder": "답을 입력하세요",
+    "feedbackCorrect": "✅ 정답입니다!",
+    "feedbackIncorrectOne": "❌ 틀렸습니다. 한 번 더 시도하세요!",
+    "feedbackIncorrectTwo": "❌ 다시 틀렸습니다.",
+    "submit": "답 제출",
+    "submitAriaLabel": "답변 제출",
+    "errorFetch": "문장을 불러오는데 실패했습니다"
   }
-} 
+}
