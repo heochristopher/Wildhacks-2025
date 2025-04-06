@@ -119,9 +119,9 @@ export default function Level3Reading() {
     setAttempts(0);
     setUserAnswer("");
     setFeedback("");
-    if (questionIndex >= sentencePairs.length - 1) {
+    if (questionIndex >= sentencePairs.length ) {
       setIsFinished(true);
-      submitProgress(correctCount);
+      submitProgress(correctCount+1);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
@@ -129,9 +129,12 @@ export default function Level3Reading() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score ) / sentencePairs.length;
+      let percent = (score) / sentencePairs.length;
       let newDifficulty = currentDifficulty;
-
+      if (correctCount === 0) {
+        percent = 0;
+      }
+      console.log(score, percent)
       if (percent < 0.5) {
         if (currentDifficulty === "medium") newDifficulty = "easy";
         else if (currentDifficulty === "hard") newDifficulty = "medium";

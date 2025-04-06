@@ -107,8 +107,11 @@ export default function Level3Writing() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score ) / sentences.length;
+      let percent = (score ) / sentences.length;
       let newDifficulty = currentDifficulty;
+      if (correctCount === 0) {
+        percent = 0;
+      }
 
       if (percent < 0.5) {
         if (currentDifficulty === "medium") newDifficulty = "easy";
@@ -141,7 +144,7 @@ export default function Level3Writing() {
 
     if (questionIndex >= sentences.length - 1) {
       setIsFinished(true);
-      submitProgress(correctCount);
+      submitProgress(correctCount+1);
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
