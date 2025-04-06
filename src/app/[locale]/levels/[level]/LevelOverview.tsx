@@ -21,7 +21,7 @@ export default function LevelOverview({ title, description, startRoute }: LevelO
         className="cursor-pointer px-6 py-3 bg-green-800 text-white rounded-md hover:bg-green-700 transition"
         aria-label={t("startAriaLabel")}
       >
-        {t("start")}
+        {t("buttonText")}
       </button>
     </main>
   );

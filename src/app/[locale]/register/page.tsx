@@ -20,7 +20,7 @@ export default function Register() {
       body: JSON.stringify(body)
     })
     if (res.status === 200) {
-      router.push('/userdashboard')
+      router.push('/levels')
     }
   }
     return (
