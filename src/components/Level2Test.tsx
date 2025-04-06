@@ -77,6 +77,12 @@ export default function Level2Test() {
       setUserAnswer("");
     } else {
       setFeedback(t("feedbackIncorrectTwo"));
+      if (questionNumber >= 10) {
+        setIsFinished(true);
+        submitProgress(correctCount); // ❌ no +1 because it was incorrect
+      } else {
+        nextQuestion();
+      }
       setTimeout(() => {  
         nextQuestion();
       }, 1000);
@@ -89,7 +95,7 @@ export default function Level2Test() {
     setAttempts(0);
     if (questionNumber >= 10) {
       setIsFinished(true);
-      submitProgress(correctCount);
+      submitProgress(correctCount+1);
     } else {
       setQuestionNumber((prev) => prev + 1);
     }
@@ -97,9 +103,11 @@ export default function Level2Test() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score ) / 10;
+      let percent = (score ) / 10;
       let newDifficulty = currentDifficulty;
-
+      if (correctCount === 0) {
+        percent = 0;
+      }
       if (percent < 0.5) {
         if (currentDifficulty === "medium") newDifficulty = "easy";
         else if (currentDifficulty === "hard") newDifficulty = "medium";
