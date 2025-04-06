@@ -34,7 +34,7 @@ export default function Level2Test() {
   }, []);
 
   // Compute current word
-  // const currentWord = questions[questionNumber - 1] || "Loading...";
+  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
 
   // When currentWord changes, speak it using the Speech Synthesis API
   useEffect(() => {
@@ -86,8 +86,7 @@ export default function Level2Test() {
     return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
   }
 
-  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
-
+  
   return (
     <main
       role="main"

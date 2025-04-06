@@ -127,9 +127,9 @@ declare const messages: {
     "questionCount": "Reading {current} of {total}",
     "inputLabel": "Type your answer here",
     "inputPlaceholder": "Type your answer",
-    "feedbackCorrect": "✅ Correct!",
-    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
-    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "feedbackCorrect": "Correct!",
+    "feedbackIncorrectOne": "Incorrect. One more try!",
+    "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit Answer",
     "submitAriaLabel": "Submit your answer"
   },
@@ -139,12 +139,14 @@ declare const messages: {
     "instruction": "Read and type this sentence exactly:",
     "inputLabel": "Type your answer here",
     "inputPlaceholder": "Type your answer here",
-    "feedbackCorrect": "✅ Correct!",
-    "feedbackIncorrectOne": "❌ Incorrect. One more try!",
-    "feedbackIncorrectTwo": "❌ Incorrect again.",
+    "feedbackCorrect": "Correct!",
+    "feedbackIncorrectOne": "Incorrect. One more try!",
+    "feedbackIncorrectTwo": "Incorrect again.",
     "submit": "Submit Answer",
     "submitAriaLabel": "Submit your answer",
-    "errorFetch": "Failed to fetch sentences"
+    "errorFetch": "Failed to fetch sentences",
+    "lang": "en-US",
+    "rate": "0.75"
   }
 };
 export default messages;
