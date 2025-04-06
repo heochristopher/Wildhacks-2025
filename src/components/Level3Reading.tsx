@@ -38,38 +38,35 @@ export default function Level3Reading() {
             return { sentence, question: q.question };
           })
         );
-
         setSentencePairs(questionPairs);
       } catch (err) {
-        console.error("Error fetching sentence/question:", err);
+        console.error(t("errorFetch"), err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSentencesAndQuestions();
-  }, []);
+  }, [t]);
 
   const currentPair = sentencePairs[questionIndex];
 
-  // Use Speech Synthesis to say the question, then after 1 second say the answer.
+  // Use Speech Synthesis to speak the current sentence and question.
   useEffect(() => {
     if (!loading && currentPair) {
-      // Cancel any ongoing speech.
       window.speechSynthesis.cancel();
-
-      // After 1 second, speak the sentence (answer).
-      const answerUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
-      answerUtterance.lang = "en-US";
-      answerUtterance.rate = 0.75; // adjust rate as needed
-      window.speechSynthesis.speak(answerUtterance);
-
+      // Speak the sentence (the answer) first.
+      const sentenceUtterance = new SpeechSynthesisUtterance(currentPair.sentence);
+      sentenceUtterance.lang = "en-US";
+      sentenceUtterance.rate = 0.75;
+      window.speechSynthesis.speak(sentenceUtterance);
+      // Then speak the question after 2 seconds.
       setTimeout(() => {
         const questionUtterance = new SpeechSynthesisUtterance(currentPair.question);
         questionUtterance.lang = "en-US";
-        questionUtterance.rate = 0.75; // adjust rate as needed
+        questionUtterance.rate = 0.75;
         window.speechSynthesis.speak(questionUtterance);
-       }, 2000)
+      }, 2000);
     }
   }, [currentPair, loading]);
 
@@ -90,20 +87,21 @@ export default function Level3Reading() {
     if (verdict === "Correct") {
       setCorrectCount((prev) => prev + 1);
       setFeedback(t("feedbackCorrect"));
-      next();
+      nextQuestion();
     } else if (attempts === 0) {
       setFeedback(t("feedbackIncorrectOne"));
       setAttempts(1);
       setUserAnswer("");
     } else {
       setFeedback(t("feedbackIncorrectTwo"));
-      next();
+      nextQuestion();
     }
   };
 
-  const next = () => {
+  const nextQuestion = () => {
     setAttempts(0);
     setUserAnswer("");
+    setFeedback("");
     if (questionIndex >= sentencePairs.length - 1) {
       setIsFinished(true);
     } else {
@@ -157,7 +155,7 @@ export default function Level3Reading() {
         aria-labelledby="questionCount"
       />
 
-      {/* Feedback message with alert role */}
+      {/* Feedback message announced via role="alert" */}
       {feedback && (
         <p role="alert" className="text-red-600 mb-2">
           {feedback}

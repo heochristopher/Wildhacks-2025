@@ -65,16 +65,16 @@ export default function Level3Writing() {
     } else if (attempts === 0) {
       setFeedback(t("feedbackIncorrectOne"));
       const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectOne"));
-      utterance.lang = "en-US";
-      utterance.rate = 0.75;
+      utterance.lang = t('lang');
+      utterance.rate = Number(t('rate'));
       window.speechSynthesis.speak(utterance);
       setAttempts(1);
       setUserAnswer("");
     } else {
       setFeedback(t("feedbackIncorrectTwo"));
       const utterance = new SpeechSynthesisUtterance(t("feedbackIncorrectTwo"));
-      utterance.lang = "en-US";
-      utterance.rate = 0.75;
+      utterance.lang = t('lang');
+      utterance.rate = Number(t('rate'));
       utterance.onend = () => {
         setTimeout(() => {
           nextQuestion();

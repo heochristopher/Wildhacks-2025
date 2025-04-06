@@ -76,7 +76,7 @@ export default function Level2Learning() {
     return <EndOfLevel />;
   }
 
-  const currentWord = questions[questionNumber - 1] || t("loadingFallback", "Loading...");
+  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
 
   return (
     <main
