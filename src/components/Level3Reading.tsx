@@ -186,7 +186,7 @@ export default function Level3Reading() {
 
       {/* Display current sentence and question */}
       <p className="text-lg mb-2">{currentPair.sentence}</p>
-      <p className="mb-4">{currentPair.question}</p>
+      <p tabIndex={0} className="mb-4">{currentPair.question}</p>
 
       {/* Hidden label for input */}
       <label htmlFor="userAnswer" className="sr-only">

@@ -158,6 +158,23 @@ declare const messages: {
     "errorFetch": "Failed to fetch sentences",
     "lang": "en-US",
     "rate": "0.75"
+  },
+  "endOfTest": {
+    "congrats": "Great job!",
+    "scoreText": "You got {correct} out of {total} correct ({percentage}%)",
+    "continuePrompt": "Would you like to continue or return home?",
+    "backLevels": "Back to Levels",
+    "backLevelsAria": "Back to Levels",
+    "replayTest": "Replay Test",
+    "replayTestAria": "Replay Test"
+  },
+  "endOfLevel": {
+    "congrats": "Great job!",
+    "continuePrompt": "Would you like to continue or return home?",
+    "backLevels": "Back to Levels",
+    "backLevelsAria": "Back to Levels",
+    "replayLevel": "Replay Level",
+    "replayLevelAria": "Replay Level"
   }
 };
 export default messages;
