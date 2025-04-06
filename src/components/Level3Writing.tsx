@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import EndOfTest from "./EndOfTest";
+import { isReadable } from "stream";
 
 export default function Level3Writing() {
   const t = useTranslations("level3Writing");
@@ -106,7 +107,7 @@ export default function Level3Writing() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score + 1) / sentences.length;
+      const percent = (score ) / sentences.length;
       let newDifficulty = currentDifficulty;
 
       if (percent < 0.5) {
@@ -125,6 +126,7 @@ export default function Level3Writing() {
           level: 3,
           score: percent.toFixed(2).toString(),
           difficulty: newDifficulty,
+          isReading: false
         }),
       });
     } catch (err) {
