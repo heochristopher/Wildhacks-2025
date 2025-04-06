@@ -84,7 +84,7 @@ export default function Level2Test() {
 
   const submitProgress = async (score: number) => {
     try {
-      const percent = (score + 1) / 10;
+      const percent = (score ) / 10;
       let newDifficulty = currentDifficulty;
 
       if (percent < 0.5) {
@@ -103,6 +103,7 @@ export default function Level2Test() {
           level: 2,
           score: percent.toFixed(2),
           difficulty: newDifficulty,
+          isReading: false
         }),
       });
     } catch (err) {

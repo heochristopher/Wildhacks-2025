@@ -25,7 +25,7 @@ import EndOfLevel from "./EndOfLevel";
         });
         const data = await res.json();
         const userProgress = data.progress?.level1?.learning?.lastCompleted ?? 0;
-        if (userProgress < 0 || userProgress >= alphabet.length) {
+        if (userProgress < 0 || userProgress >= alphabet.length-1) {
           setQuestionIndex(0); // fallback
           return;
         }

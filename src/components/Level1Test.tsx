@@ -50,7 +50,7 @@ export default function Level1Test() {
         if (currentDifficulty === "easy") newDifficulty = "medium";
         else if (currentDifficulty === "medium") newDifficulty = "hard";
       }
-
+      console.log(percent)
       await fetch("http://localhost:8000/submitTest", {
         method: "POST",
         headers: {
@@ -61,6 +61,7 @@ export default function Level1Test() {
           level: 1,
           score: percent.toFixed(2).toString(),
           difficulty: newDifficulty,
+          isReading: false,
         }),
       });
     } catch (err) {

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
-import EndOfTest from "./EndOfTest";
+import EndOfLevel from "./EndOfLevel";
 
 export default function Level2Learning() {
   const t = useTranslations("level2Learning");
@@ -28,9 +28,15 @@ export default function Level2Learning() {
         const progressData = data.progress?.level2?.learning ?? {};
         const difficulty = data.progress?.level2?.test?.difficulty ?? "easy";
         const lastCompleted = progressData.lastCompleted ?? 0;
-
+        console.log("lastCompleted", lastCompleted);
         setCurrentDifficulty(difficulty);
-        setQuestionNumber(lastCompleted); // will be the index of the next question
+        if (lastCompleted >= 9){
+          console.log("lastCompleted", lastCompleted);
+          setQuestionNumber(0); // fallback
+        } else {
+          setQuestionNumber(lastCompleted); // will be the index of the next question
+
+        }
 
         const contentRes = await fetch(
           `http://localhost:8000/generateContent/2?difficulty=${difficulty}&language=English`
@@ -44,7 +50,6 @@ export default function Level2Learning() {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [t]);
 
@@ -70,22 +75,23 @@ export default function Level2Learning() {
   }, [isLoading, questions, questionNumber]);
 
   // Save progress on unload.
-  useEffect(() => {
-    if (questionNumber === null) return;
+  // useEffect(() => {
+  //   if (questionNumber === null) return;
 
-    const handleUnload = () => {
-      submitProgress(questionNumber);
-    };
+  //   const handleUnload = () => {
+  //     submitProgress(questionNumber);
+  //   };
 
-    window.addEventListener("beforeunload", handleUnload);
-    return () => {
-      submitProgress(questionNumber);
-      window.removeEventListener("beforeunload", handleUnload);
-    };
-  }, [questionNumber]);
+  //   window.addEventListener("beforeunload", handleUnload);
+  //   return () => {
+  //     submitProgress(questionNumber);
+  //     window.removeEventListener("beforeunload", handleUnload);
+  //   };
+  // }, [questionNumber]);
 
   const submitProgress = async (index: number) => {
     try {
+      console.log(index)
       await fetch("http://localhost:8000/updateScore", {
         method: "POST",
         headers: {
@@ -95,10 +101,11 @@ export default function Level2Learning() {
         body: JSON.stringify({
           level: 2,
           score: "-1",
-          lastCompleted: index,
+          lastCompleted: index-1,
           questions: questions.slice(index),
         }),
       });
+      setQuestionNumber(0);
     } catch (err) {
       console.error("Failed to update progress:", err);
     }
@@ -115,6 +122,7 @@ export default function Level2Learning() {
       const nextIndex = questionNumber! + 1;
       if (nextIndex >= questions.length) {
         submitProgress(nextIndex);
+        console.log(nextIndex);
         setIsFinished(true);
       } else {
         setQuestionNumber(nextIndex);
@@ -133,7 +141,7 @@ export default function Level2Learning() {
     );
   }
 
-  if (isFinished) return <EndOfTest />;
+  if (isFinished) return <EndOfLevel />;
 
   const currentWord = questions[questionNumber] || t("loadingFallback");
 
