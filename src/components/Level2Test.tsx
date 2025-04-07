@@ -17,6 +17,11 @@ export default function Level2Test() {
   const [isComposing, setIsComposing] = useState(false);
   // Create a ref for the input to auto-focus it.
   const inputRef = useRef<HTMLInputElement>(null);
+  // Ref to hold the WebSocket connection.
+  const wsRef = useRef<WebSocket | null>(null);
+
+  const currentWord =
+    questions[questionNumber - 1] || t("loadingFallback");
 
   // Fetch progress and content on mount.
   useEffect(() => {
@@ -43,7 +48,7 @@ export default function Level2Test() {
     };
 
     fetchProgressAndContent();
-  }, []);
+  }, [t]);
 
   // Auto-focus the input field when the question number changes.
   useEffect(() => {
@@ -52,8 +57,41 @@ export default function Level2Test() {
     }
   }, [questionNumber]);
 
+  // Setup WebSocket connection on mount.
+  useEffect(() => {
+    // Adjust the URL as needed.
+    const ws = new WebSocket("ws://localhost:8000/ws");
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log("WebSocket connection established for LCD display.");
+    };
+    ws.onerror = (err) => {
+      console.error("WebSocket error:", err);
+    };
+    ws.onclose = () => {
+      console.log("WebSocket connection closed.");
+      wsRef.current = null;
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  // Whenever the current word changes, send it to the backend via WebSocket.
+  useEffect(() => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && currentWord) {
+      const message = JSON.stringify({
+        type: "lcd",
+        payload: currentWord,
+      });
+      wsRef.current.send(message);
+      console.log("Sent word to LCD:", currentWord);
+    }
+  }, [currentWord]);
+
   const handleAnswer = () => {
-    const currentWord = questions[questionNumber - 1] || t("loadingFallback");
     const trimmedAnswer = userAnswer.trim().toLowerCase();
     const isLatin = /^[A-Za-z]$/.test(currentWord);
     const expectedAnswer = isLatin
@@ -63,7 +101,7 @@ export default function Level2Test() {
       ? trimmedAnswer.toUpperCase().normalize("NFC")
       : trimmedAnswer.normalize("NFD");
 
-    console.log(actualInput, expectedAnswer);
+    console.log("User answer:", actualInput, "Expected:", expectedAnswer);
 
     if (actualInput === expectedAnswer) {
       setCorrectCount((prev) => prev + 1);
@@ -79,7 +117,7 @@ export default function Level2Test() {
       setFeedback(t("feedbackIncorrectTwo"));
       if (questionNumber >= 10) {
         setIsFinished(true);
-        submitProgress(correctCount); // ❌ no +1 because it was incorrect
+        submitProgress(correctCount); // no +1 because it was incorrect
       } else {
         nextQuestion();
       }
@@ -95,7 +133,7 @@ export default function Level2Test() {
     setAttempts(0);
     if (questionNumber >= 10) {
       setIsFinished(true);
-      submitProgress(correctCount+1);
+      submitProgress(correctCount + 1);
     } else {
       setQuestionNumber((prev) => prev + 1);
     }
@@ -103,7 +141,7 @@ export default function Level2Test() {
 
   const submitProgress = async (score: number) => {
     try {
-      let percent = (score ) / 10;
+      let percent = score / 10;
       let newDifficulty = currentDifficulty;
       if (correctCount === 0) {
         percent = 0;
@@ -124,7 +162,7 @@ export default function Level2Test() {
           level: 2,
           score: percent.toFixed(2),
           difficulty: newDifficulty,
-          isReading: false
+          isReading: false,
         }),
       });
     } catch (err) {
@@ -143,8 +181,6 @@ export default function Level2Test() {
   if (isFinished) {
     return <EndOfTest score={{ correct: correctCount, total: 10 }} />;
   }
-
-  const currentWord = questions[questionNumber - 1] || t("loadingFallback");
 
   return (
     <main
@@ -185,6 +221,7 @@ export default function Level2Test() {
             handleAnswer();
           }
         }}
+        ref={inputRef}
         className="border border-gray-400 px-4 py-2 mb-4 rounded w-64 text-black text-center"
         placeholder={t("inputPlaceholder")}
         aria-labelledby="instruction questionCount"

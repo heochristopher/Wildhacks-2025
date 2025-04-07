@@ -64,6 +64,7 @@ LATIN_TO_BRAILLE: Dict[str, str] = {
 }
 
 
+
 # Reverse mapping for Latin Braille
 BRAILLE_TO_LATIN: Dict[str, str] = {v: k for k, v in LATIN_TO_BRAILLE.items()}
 

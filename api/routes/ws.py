@@ -34,22 +34,24 @@ if ser is not None:
         print("Client connected via WebSocket")
 
         async def send_serial_data():
-            """
-            Read from the serial port (keyboard input) and forward to the client.
-            """
             try:
                 while True:
-                    if ser.in_waiting:
+                    if ser and ser.in_waiting:
                         # Read a line from the Arduino and decode it
                         line = ser.readline().decode('utf-8').strip()
-                        decoded_text = BRAILLE_TO_LATIN.get(line)
+                        print(line)
+                        decoded_text = BRAILLE_TO_LATIN.get(line, "")
+
+                        print(f"Decoded text: {decoded_text}")
                         message = {"type": "keyboard", "payload": decoded_text}
                         await websocket.send_json(message)
                     await asyncio.sleep(0.1)
+            except WebSocketDisconnect:
+                print("WebSocket disconnected in send_serial_data")
             except Exception as e:
-                error_msg = {"type": "error", "payload": f"Serial read error: {str(e)}"}
-                await websocket.send_json(error_msg)
+                print(f"Error in send_serial_data: {e}")
 
+        
         async def receive_client_messages():
             """
             Listen for incoming messages from the client and process them.
@@ -69,26 +71,22 @@ if ser is not None:
 
                     if message_type == "lcd":
                         try:
-                            character = payload
-                            print(f"Received character for LCD: {character}")
-                            if payload is None:
-                                await websocket.send_json({"type": "error", "payload": "Character not found in mapping"})
-                                continue
+                            print(payload)
+                            text_to_send = data["payload"]  # "hi"
+                            res = ""
+                            for c in text_to_send:
+                                if c in LATIN_TO_BRAILLE:
+                                    res += LATIN_TO_BRAILLE[c]
+                                else:
+                                    res += "@"
+                            message = res.encode('utf-8') + b'\n'
+                            # print(f"sending to serial: {res}")
 
-
-                            # pattern = text_to_send.encode('utf-8') + b'\n'
-
-                            # print(type(pattern))
-                            # print(f"Sending to serial: {pattern}")
-                            pattern = ""
-                            for char in payload:
-                                pattern + (LATIN_TO_BRAILLE.get(char, "000000"))
-                            
-                            
-                            text_to_send = pattern.encode('utf-8') + b'\n'
-                            
-                            ser.write(text_to_send)
-
+                            ser.write(message)
+                            # Convert the binary string to bytes and send to Arduino
+                            # payload = payload.encode('utf-8')
+                            # ser.write(payload)
+                            # Optionally, acknowledge receipt
                             await websocket.send_json({"type": "ack", "payload": "LCD command sent"})
                         except Exception as e:
                             await websocket.send_json({"type": "error", "payload": f"Error sending LCD command: {str(e)}"})
@@ -106,6 +104,7 @@ if ser is not None:
 
         # Wait until one of the tasks terminates (e.g. client disconnects)
         await asyncio.gather(send_task, recv_task)
+
 
 else:
     @router.websocket("/ws")
