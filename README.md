@@ -2,6 +2,7 @@
 
 **Bridging the Braille Literacy Gap Through Accessible AI-Powered Education**
 
+--[DotBy.tech](https://dotby.tech/en)
 ---
 
 ## Inspiration
