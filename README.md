@@ -66,10 +66,10 @@ We were inspired to create a solution that tackles this gap by combining **intui
 
 ## Accomplishments
 
-- ✅ **True Accessibility**: Integrated both hardware and software accessibility in a meaningful way.
-- 💰 **Low-Cost Hardware Prototype**: Designed a cost-effective braille keyboard with refreshable cell concepts using university resources.
-- 🤖 **AI-Driven Personalization**: Used Gemini AI to adapt lesson difficulty in real time.
-- 🌐 **Global Reach**: Implemented internationalization and localization for multi-language support.
+- **True Accessibility**: Integrated both hardware and software accessibility in a meaningful way.
+- **Low-Cost Hardware Prototype**: Designed a cost-effective braille keyboard with refreshable cell concepts using university resources.
+- **AI-Driven Personalization**: Used Gemini AI to adapt lesson difficulty in real time.
+- **Global Reach**: Implemented internationalization and localization for multi-language support.
 
 ---
 
@@ -110,6 +110,10 @@ We were inspired to create a solution that tackles this gap by combining **intui
 
 For questions or collaboration ideas, feel free to reach out via GitHub Issues or open a discussion!
 
+---
+## DevPost
+
+- [DevPost Link](https://devpost.com/software/dotbydot)
 ---
 
 # DotByDot API Documentation
